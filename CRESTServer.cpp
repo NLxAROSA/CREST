@@ -27,25 +27,203 @@ static void sendConflict(struct ns_connection *nc)    {
     ns_printf(nc, "%s", HTTP_HEADER_NO_CONTENT);
 }
 
+static void sendBuildInfo(struct ns_connection *nc, const SharedMemory* sharedData)	{
+	ns_printf_http_chunk(nc, "\"buildinfo\":{");
+	ns_printf_http_chunk(nc, "\"mVersion\":%u", sharedData->mVersion);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mBuildVersionNumber\":%u", sharedData->mBuildVersionNumber);
+	ns_printf_http_chunk(nc, "}");
+}
+
+static void sendGameStates(struct ns_connection *nc, const SharedMemory* sharedData)	{
+	ns_printf_http_chunk(nc, "\"gameStates\":{");
+	ns_printf_http_chunk(nc, "\"mGameState\":%u", sharedData->mGameState);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mSessionState\":%u", sharedData->mSessionState);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mRaceState\":%u", sharedData->mRaceState);
+	ns_printf_http_chunk(nc, "}");
+}
+
+static void sendParticipant(struct ns_connection *nc, const ParticipantInfo participantInfo)	{
+	ns_printf_http_chunk(nc, "\"participantInfo\":{");
+	ns_printf_http_chunk(nc, "\"mIsActive\":%s", participantInfo.mIsActive ? "true" : "false");
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mName\":%s", participantInfo.mName);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mWorldPositionX\":%f", participantInfo.mWorldPosition[0]);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mWorldPositionY\":%f", participantInfo.mWorldPosition[1]);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mWorldPositionZ\":%f", participantInfo.mWorldPosition[2]);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mCurrentLapDistance\":%f", participantInfo.mCurrentLapDistance);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mRacePosition\":%u", participantInfo.mRacePosition);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mLapsCompleted\":%u", participantInfo.mLapsCompleted);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mCurrentLap\":%u", participantInfo.mCurrentLap);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mCurrentSector\":%u", participantInfo.mCurrentSector);
+	ns_printf_http_chunk(nc, "}");
+}
+
+static void sendParticipants(struct ns_connection *nc, const SharedMemory* sharedData)	{
+	ns_printf_http_chunk(nc, "\"participants\":{");
+	ns_printf_http_chunk(nc, "\"mViewedParticipantIndex\":%i", sharedData->mViewedParticipantIndex);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mNumParticipants\":%i", sharedData->mNumParticipants);
+
+	if (sharedData->mNumParticipants > -1)	{
+		ns_printf_http_chunk(nc, ",");
+		ns_printf_http_chunk(nc, "\"mParticipantInfo\":[");
+
+		for (size_t i = 0; i < sharedData->mNumParticipants; i++)	{
+			sendParticipant(nc, sharedData->mParticipantInfo[i]);
+		}
+		ns_printf_http_chunk(nc, "]");
+
+	}
+
+	ns_printf_http_chunk(nc, "}");
+
+}
+
+static void sendUnfilteredInput(struct ns_connection *nc, const SharedMemory* sharedData)	{
+	ns_printf_http_chunk(nc, "\"unfilteredInput\":{");
+	ns_printf_http_chunk(nc, "\"mUnfilteredThrottle\":%f", sharedData->mUnfilteredThrottle);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mUnfilteredBrake\":%f", sharedData->mUnfilteredBrake);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mUnfilteredSteering\":%f", sharedData->mUnfilteredSteering);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mUnfilteredClutch\":%f", sharedData->mUnfilteredClutch);
+	ns_printf_http_chunk(nc, "}");
+}
+
+static void sendVehicleInformation(struct ns_connection *nc, const SharedMemory* sharedData)	{
+	ns_printf_http_chunk(nc, "\"vehicleInformation\":{");
+	ns_printf_http_chunk(nc, "\"mCarName\":%s", sharedData->mCarName);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mCarName\":%s", sharedData->mCarName);
+	ns_printf_http_chunk(nc, "}");
+}
+
+static void sendEventInformation(struct ns_connection *nc, const SharedMemory* sharedData)	{
+	ns_printf_http_chunk(nc, "\"eventInformation\":{");
+	ns_printf_http_chunk(nc, "\"mLapsInEvent\":%u", sharedData->mLapsInEvent);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mTrackLocation\":%s", sharedData->mTrackLocation);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mTrackVariation\":%s", sharedData->mTrackVariation);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mTrackLength\":%f", sharedData->mTrackLength);
+	ns_printf_http_chunk(nc, "}");
+}
+
+static void sendTimings(struct ns_connection *nc, const SharedMemory* sharedData)	{
+	ns_printf_http_chunk(nc, "\"timings\":{");
+	ns_printf_http_chunk(nc, "\"mLapInvalidated\":%s", sharedData->mLapInvalidated ? "true" : "false");
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mBestLapTime\":%f", sharedData->mBestLapTime);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mLastLapTime\":%f", sharedData->mLastLapTime);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mCurrentTime\":%f", sharedData->mCurrentTime);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mSplitTimeAhead\":%f", sharedData->mSplitTimeAhead);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mSplitTimeBehind\":%f", sharedData->mSplitTimeBehind);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mSplitTime\":%f", sharedData->mSplitTime);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mEventTimeRemaining\":%f", sharedData->mEventTimeRemaining);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mPersonalFastestLapTime\":%f", sharedData->mPersonalFastestLapTime);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mWorldFastestLapTime\":%f", sharedData->mWorldFastestLapTime);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mCurrentSector1Time\":%f", sharedData->mCurrentSector1Time);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mCurrentSector2Time\":%f", sharedData->mCurrentSector2Time);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mCurrentSector3Time\":%f", sharedData->mCurrentSector3Time);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mFastestSector1Time\":%f", sharedData->mFastestSector1Time);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mFastestSector2Time\":%f", sharedData->mFastestSector2Time);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mFastestSector3Time\":%f", sharedData->mFastestSector3Time);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mPersonalFastestSector1Time\":%f", sharedData->mPersonalFastestSector1Time);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mPersonalFastestSector2Time\":%f", sharedData->mPersonalFastestSector2Time);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mPersonalFastestSector3Time\":%f", sharedData->mPersonalFastestSector3Time);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mWorldFastestSector1Time\":%f", sharedData->mWorldFastestSector1Time);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mWorldFastestSector2Time\":%f", sharedData->mWorldFastestSector2Time);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mWorldFastestSector3Time\":%f", sharedData->mWorldFastestSector3Time);
+	ns_printf_http_chunk(nc, "}");
+}
+
+static void sendFlags(struct ns_connection *nc, const SharedMemory* sharedData)	{
+	ns_printf_http_chunk(nc, "\"flags\":{");
+	ns_printf_http_chunk(nc, "\"mHighestFlagColour\":%u", sharedData->mHighestFlagColour);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mHighestFlagReason\":%u", sharedData->mHighestFlagReason);
+	ns_printf_http_chunk(nc, "}");
+}
+
+static void sendPitInfo(struct ns_connection *nc, const SharedMemory* sharedData)	{
+	ns_printf_http_chunk(nc, "\"pitInfo\":{");
+	ns_printf_http_chunk(nc, "\"mPitMode\":%u", sharedData->mPitMode);
+	ns_printf_http_chunk(nc, ",");
+	ns_printf_http_chunk(nc, "\"mPitSchedule\":%u", sharedData->mPitSchedule);
+	ns_printf_http_chunk(nc, "}");
+}
+
 static void sendSharedMemoryJson(struct ns_connection *nc, const SharedMemory* sharedData)  {
     /* Send HTTP OK response header */
     ns_printf(nc, "%s", HTTP_RESPONSE_200);
     
-    // Start printing the output
-    ns_printf_http_chunk(nc, "{ Start of game data }");
-    
-    const bool isValidParticipantIndex = sharedData->mViewedParticipantIndex != -1 && sharedData->mViewedParticipantIndex < sharedData->mNumParticipants && sharedData->mViewedParticipantIndex < STORED_PARTICIPANTS_MAX;
+    // Start of JSON output
+    ns_printf_http_chunk(nc, "{");
+
+	sendBuildInfo(nc, sharedData);
+	ns_printf_http_chunk(nc, ",");
+	sendGameStates(nc, sharedData);
+	ns_printf_http_chunk(nc, ",");
+	sendParticipants(nc, sharedData);
+	ns_printf_http_chunk(nc, ",");
+	sendUnfilteredInput(nc, sharedData);
+	ns_printf_http_chunk(nc, ",");
+	sendVehicleInformation(nc, sharedData);
+	ns_printf_http_chunk(nc, ",");
+	sendEventInformation(nc, sharedData);
+	ns_printf_http_chunk(nc, ",");
+	sendTimings(nc, sharedData);
+	ns_printf_http_chunk(nc, ",");
+	sendFlags(nc, sharedData);
+	ns_printf_http_chunk(nc, ",");
+	sendPitInfo(nc, sharedData);
+
+	const bool isValidParticipantIndex = sharedData->mViewedParticipantIndex != -1 && sharedData->mViewedParticipantIndex < sharedData->mNumParticipants && sharedData->mViewedParticipantIndex < STORED_PARTICIPANTS_MAX;
     if (isValidParticipantIndex)	{
         const ParticipantInfo& viewedParticipantInfo = sharedData->mParticipantInfo[sharedData->mViewedParticipantIndex];
-        ns_printf_http_chunk(nc, "mParticipantName: (%s)\n", viewedParticipantInfo.mName);
-        ns_printf_http_chunk(nc, "mWorldPosition: (%f,%f,%f)\n", viewedParticipantInfo.mWorldPosition[0], viewedParticipantInfo.mWorldPosition[1], viewedParticipantInfo.mWorldPosition[2]);
+        //ns_printf_http_chunk(nc, "mParticipantName: (%s)\n", viewedParticipantInfo.mName);
+        //ns_printf_http_chunk(nc, "mWorldPosition: (%f,%f,%f)\n", viewedParticipantInfo.mWorldPosition[0], viewedParticipantInfo.mWorldPosition[1], viewedParticipantInfo.mWorldPosition[2]);
     }
-    ns_printf_http_chunk(nc, "mGameState: (%d)\n", sharedData->mGameState);
-    ns_printf_http_chunk(nc, "mSessionState: (%d)\n", sharedData->mSessionState);
-    ns_printf_http_chunk(nc, "mRaceState: (%d)\n", sharedData->mRaceState);
+    //ns_printf_http_chunk(nc, "mGameState: (%d)\n", sharedData->mGameState);
+    //ns_printf_http_chunk(nc, "mSessionState: (%d)\n", sharedData->mSessionState);
+    //ns_printf_http_chunk(nc, "mRaceState: (%d)\n", sharedData->mRaceState);
     
-    ns_printf_http_chunk(nc, "{ End of game data }");
-    
+	// End of JSON output
+	ns_printf_http_chunk(nc, "}");
+
 }
 
 static void processSharedMemoryData(struct ns_connection *nc, const SharedMemory* sharedData)   {
