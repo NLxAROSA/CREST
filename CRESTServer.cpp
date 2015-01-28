@@ -46,6 +46,7 @@ static void sendGameStates(struct ns_connection *nc, const SharedMemory* sharedD
 }
 
 static void sendParticipant(struct ns_connection *nc, const ParticipantInfo participantInfo)	{
+    ns_printf_http_chunk(nc, "{");
 	ns_printf_http_chunk(nc, "\"mIsActive\":%s", participantInfo.mIsActive ? "true" : "false");
 	ns_printf_http_chunk(nc, ",");
 	ns_printf_http_chunk(nc, "\"mName\":\"%s\"", participantInfo.mName);
@@ -113,9 +114,9 @@ static void sendEventInformation(struct ns_connection *nc, const SharedMemory* s
 	ns_printf_http_chunk(nc, "\"eventInformation\":{");
 	ns_printf_http_chunk(nc, "\"mLapsInEvent\":%u", sharedData->mLapsInEvent);
 	ns_printf_http_chunk(nc, ",");
-	ns_printf_http_chunk(nc, "\"mTrackLocation\":%s", sharedData->mTrackLocation);
+	ns_printf_http_chunk(nc, "\"mTrackLocation\":\"%s\"", sharedData->mTrackLocation);
 	ns_printf_http_chunk(nc, ",");
-	ns_printf_http_chunk(nc, "\"mTrackVariation\":%s", sharedData->mTrackVariation);
+	ns_printf_http_chunk(nc, "\"mTrackVariation\":\"%s\"", sharedData->mTrackVariation);
 	ns_printf_http_chunk(nc, ",");
 	ns_printf_http_chunk(nc, "\"mTrackLength\":%f", sharedData->mTrackLength);
 	ns_printf_http_chunk(nc, "}");
