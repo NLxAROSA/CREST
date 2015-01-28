@@ -46,10 +46,9 @@ static void sendGameStates(struct ns_connection *nc, const SharedMemory* sharedD
 }
 
 static void sendParticipant(struct ns_connection *nc, const ParticipantInfo participantInfo)	{
-	ns_printf_http_chunk(nc, "\"participantInfo\":{");
 	ns_printf_http_chunk(nc, "\"mIsActive\":%s", participantInfo.mIsActive ? "true" : "false");
 	ns_printf_http_chunk(nc, ",");
-	ns_printf_http_chunk(nc, "\"mName\":%s", participantInfo.mName);
+	ns_printf_http_chunk(nc, "\"mName\":\"%s\"", participantInfo.mName);
 	ns_printf_http_chunk(nc, ",");
 	ns_printf_http_chunk(nc, "\"mWorldPositionX\":%f", participantInfo.mWorldPosition[0]);
 	ns_printf_http_chunk(nc, ",");
@@ -104,9 +103,9 @@ static void sendUnfilteredInput(struct ns_connection *nc, const SharedMemory* sh
 
 static void sendVehicleInformation(struct ns_connection *nc, const SharedMemory* sharedData)	{
 	ns_printf_http_chunk(nc, "\"vehicleInformation\":{");
-	ns_printf_http_chunk(nc, "\"mCarName\":%s", sharedData->mCarName);
+	ns_printf_http_chunk(nc, "\"mCarName\":\"%s\"", sharedData->mCarName);
 	ns_printf_http_chunk(nc, ",");
-	ns_printf_http_chunk(nc, "\"mCarName\":%s", sharedData->mCarName);
+	ns_printf_http_chunk(nc, "\"mCarClassName\":\"%s\"", sharedData->mCarClassName);
 	ns_printf_http_chunk(nc, "}");
 }
 
