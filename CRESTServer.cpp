@@ -1,3 +1,4 @@
+// Dependencies
 #include <windows.h>
 #include <stdio.h>
 #include <conio.h>
@@ -15,6 +16,11 @@
 #define HTTP_RESPONSE_200 "HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\n\r\n"
 #define HTTP_RESPONSE_404 "HTTP/1.1 404 Not found\r\n"
 
+#define HTTP_RESPONSE_BODY_503 "{status: \"Project CARS data not available. Please ensure that Project CARS is running and Shared Memory is enabled under Options -> Visuals -> Hardware\"}"
+#define HTTP_RESPONSE_BODY_409 "{status: \"Project CARS data is available, but there is a version conflict. Please ensure that both Project CARS and CREST are up to date\"}"
+#define HTTP_RESPONSE_BODY_404 "{status: \"Unknown request URL, please use " + CREST_API_URL + " only\"}"
+
+// Server variables
 static const char *s_http_port = "8080";
 static struct ns_serve_http_opts s_http_server_opts;
 
@@ -31,29 +37,25 @@ static void sendConflict(struct ns_connection *nc)    {
 static void sendBuildInfo(struct ns_connection *nc, const SharedMemory* sharedData)	{
 	ns_printf_http_chunk(nc, "\"buildinfo\":{");
 	ns_printf_http_chunk(nc, "\"mVersion\":%u,", sharedData->mVersion);
-	ns_printf_http_chunk(nc, "\"mBuildVersionNumber\":%u", sharedData->mBuildVersionNumber);
-	ns_printf_http_chunk(nc, "},");
+	ns_printf_http_chunk(nc, "\"mBuildVersionNumber\":%u},", sharedData->mBuildVersionNumber);
 }
 
 static void sendGameStates(struct ns_connection *nc, const SharedMemory* sharedData)	{
 	ns_printf_http_chunk(nc, "\"gameStates\":{");
 	ns_printf_http_chunk(nc, "\"mGameState\":%u,", sharedData->mGameState);
 	ns_printf_http_chunk(nc, "\"mSessionState\":%u,", sharedData->mSessionState);
-	ns_printf_http_chunk(nc, "\"mRaceState\":%u", sharedData->mRaceState);
-	ns_printf_http_chunk(nc, "},");
+	ns_printf_http_chunk(nc, "\"mRaceState\":%u},", sharedData->mRaceState);
 }
 
 static void sendParticipant(struct ns_connection *nc, const ParticipantInfo participantInfo)	{
-    ns_printf_http_chunk(nc, "{");
-	ns_printf_http_chunk(nc, "\"mIsActive\":%s,", participantInfo.mIsActive ? "true" : "false");
+	ns_printf_http_chunk(nc, "{\"mIsActive\":%s,", participantInfo.mIsActive ? "true" : "false");
 	ns_printf_http_chunk(nc, "\"mName\":\"%s\",", participantInfo.mName);
 	ns_printf_http_chunk(nc, "\"mWorldPosition\":[%f,%f,%f],", participantInfo.mWorldPosition[0], participantInfo.mWorldPosition[1], participantInfo.mWorldPosition[2]);
 	ns_printf_http_chunk(nc, "\"mCurrentLapDistance\":%f,", participantInfo.mCurrentLapDistance);
 	ns_printf_http_chunk(nc, "\"mRacePosition\":%u,", participantInfo.mRacePosition);
 	ns_printf_http_chunk(nc, "\"mLapsCompleted\":%u,", participantInfo.mLapsCompleted);
 	ns_printf_http_chunk(nc, "\"mCurrentLap\":%u,", participantInfo.mCurrentLap);
-	ns_printf_http_chunk(nc, "\"mCurrentSector\":%u", participantInfo.mCurrentSector);
-	ns_printf_http_chunk(nc, "}");
+	ns_printf_http_chunk(nc, "\"mCurrentSector\":%u}", participantInfo.mCurrentSector);
 }
 
 static void sendParticipants(struct ns_connection *nc, const SharedMemory* sharedData)	{
@@ -84,15 +86,13 @@ static void sendUnfilteredInput(struct ns_connection *nc, const SharedMemory* sh
 	ns_printf_http_chunk(nc, "\"mUnfilteredThrottle\":%f,", sharedData->mUnfilteredThrottle);
 	ns_printf_http_chunk(nc, "\"mUnfilteredBrake\":%f,", sharedData->mUnfilteredBrake);
 	ns_printf_http_chunk(nc, "\"mUnfilteredSteering\":%f,", sharedData->mUnfilteredSteering);
-	ns_printf_http_chunk(nc, "\"mUnfilteredClutch\":%f", sharedData->mUnfilteredClutch);
-	ns_printf_http_chunk(nc, "},");
+	ns_printf_http_chunk(nc, "\"mUnfilteredClutch\":%f},", sharedData->mUnfilteredClutch);
 }
 
 static void sendVehicleInformation(struct ns_connection *nc, const SharedMemory* sharedData)	{
 	ns_printf_http_chunk(nc, "\"vehicleInformation\":{");
 	ns_printf_http_chunk(nc, "\"mCarName\":\"%s\",", sharedData->mCarName);
-	ns_printf_http_chunk(nc, "\"mCarClassName\":\"%s\"", sharedData->mCarClassName);
-	ns_printf_http_chunk(nc, "},");
+	ns_printf_http_chunk(nc, "\"mCarClassName\":\"%s\"},", sharedData->mCarClassName);
 }
 
 static void sendEventInformation(struct ns_connection *nc, const SharedMemory* sharedData)	{
@@ -100,8 +100,7 @@ static void sendEventInformation(struct ns_connection *nc, const SharedMemory* s
 	ns_printf_http_chunk(nc, "\"mLapsInEvent\":%u,", sharedData->mLapsInEvent);
 	ns_printf_http_chunk(nc, "\"mTrackLocation\":\"%s\",", sharedData->mTrackLocation);
 	ns_printf_http_chunk(nc, "\"mTrackVariation\":\"%s\",", sharedData->mTrackVariation);
-	ns_printf_http_chunk(nc, "\"mTrackLength\":%f", sharedData->mTrackLength);
-	ns_printf_http_chunk(nc, "},");
+	ns_printf_http_chunk(nc, "\"mTrackLength\":%f},", sharedData->mTrackLength);
 }
 
 static void sendTimings(struct ns_connection *nc, const SharedMemory* sharedData)	{
@@ -127,22 +126,19 @@ static void sendTimings(struct ns_connection *nc, const SharedMemory* sharedData
 	ns_printf_http_chunk(nc, "\"mPersonalFastestSector3Time\":%f,", sharedData->mPersonalFastestSector3Time);
 	ns_printf_http_chunk(nc, "\"mWorldFastestSector1Time\":%f,", sharedData->mWorldFastestSector1Time);
 	ns_printf_http_chunk(nc, "\"mWorldFastestSector2Time\":%f,", sharedData->mWorldFastestSector2Time);
-	ns_printf_http_chunk(nc, "\"mWorldFastestSector3Time\":%f", sharedData->mWorldFastestSector3Time);
-	ns_printf_http_chunk(nc, "},");
+	ns_printf_http_chunk(nc, "\"mWorldFastestSector3Time\":%f},", sharedData->mWorldFastestSector3Time);
 }
 
 static void sendFlags(struct ns_connection *nc, const SharedMemory* sharedData)	{
 	ns_printf_http_chunk(nc, "\"flags\":{");
 	ns_printf_http_chunk(nc, "\"mHighestFlagColour\":%u,", sharedData->mHighestFlagColour);
-	ns_printf_http_chunk(nc, "\"mHighestFlagReason\":%u", sharedData->mHighestFlagReason);
-	ns_printf_http_chunk(nc, "},");
+	ns_printf_http_chunk(nc, "\"mHighestFlagReason\":%u},", sharedData->mHighestFlagReason);
 }
 
 static void sendPitInfo(struct ns_connection *nc, const SharedMemory* sharedData)	{
 	ns_printf_http_chunk(nc, "\"pitInfo\":{");
 	ns_printf_http_chunk(nc, "\"mPitMode\":%u,", sharedData->mPitMode);
-	ns_printf_http_chunk(nc, "\"mPitSchedule\":%u", sharedData->mPitSchedule);
-	ns_printf_http_chunk(nc, "},");
+	ns_printf_http_chunk(nc, "\"mPitSchedule\":%u},", sharedData->mPitSchedule);
 }
 
 static void sendCarState(struct ns_connection *nc, const SharedMemory* sharedData)	{
@@ -168,8 +164,7 @@ static void sendCarState(struct ns_connection *nc, const SharedMemory* sharedDat
 	ns_printf_http_chunk(nc, "\"mLastOpponentCollisionIndex\":%i,", sharedData->mLastOpponentCollisionIndex);
 	ns_printf_http_chunk(nc, "\"mLastOpponentCollisionMagnitude\":%f,", sharedData->mLastOpponentCollisionMagnitude);
 	ns_printf_http_chunk(nc, "\"mBoostActive\":%s,", sharedData->mBoostActive ? "true" : "false");
-	ns_printf_http_chunk(nc, "\"mBoostAmount\":%f", sharedData->mBoostAmount);
-	ns_printf_http_chunk(nc, "},");
+	ns_printf_http_chunk(nc, "\"mBoostAmount\":%f},", sharedData->mBoostAmount);
 }
 
 static void sendMotionDeviceRelated(struct ns_connection *nc, const SharedMemory* sharedData)	{
@@ -180,8 +175,7 @@ static void sendMotionDeviceRelated(struct ns_connection *nc, const SharedMemory
 	ns_printf_http_chunk(nc, "\"mAngularVelocity\":[%f,%f,%f],", sharedData->mAngularVelocity[0], sharedData->mAngularVelocity[1], sharedData->mAngularVelocity[2]);
 	ns_printf_http_chunk(nc, "\"mLocalAcceleration\":[%f,%f,%f],", sharedData->mLocalAcceleration[0], sharedData->mLocalAcceleration[1], sharedData->mLocalAcceleration[2]);
 	ns_printf_http_chunk(nc, "\"mWorldAcceleration\":[%f,%f,%f],", sharedData->mWorldAcceleration[0], sharedData->mWorldAcceleration[1], sharedData->mWorldAcceleration[2]);
-	ns_printf_http_chunk(nc, "\"mExtentsCentre\":[%f,%f,%f]", sharedData->mExtentsCentre[0], sharedData->mExtentsCentre[1], sharedData->mExtentsCentre[2]);
-	ns_printf_http_chunk(nc, "},");
+	ns_printf_http_chunk(nc, "\"mExtentsCentre\":[%f,%f,%f]},", sharedData->mExtentsCentre[0], sharedData->mExtentsCentre[1], sharedData->mExtentsCentre[2]);
 }
 
 static void sendWheelsTyres(struct ns_connection *nc, const SharedMemory* sharedData)	{
@@ -203,16 +197,14 @@ static void sendWheelsTyres(struct ns_connection *nc, const SharedMemory* shared
 	ns_printf_http_chunk(nc, "\"mTyreLayerTemp\":[%f,%f,%f,%f],", sharedData->mTyreLayerTemp[0], sharedData->mTyreLayerTemp[1], sharedData->mTyreLayerTemp[2], sharedData->mTyreLayerTemp[3]);
 	ns_printf_http_chunk(nc, "\"mTyreCarcassTemp\":[%f,%f,%f,%f],", sharedData->mTyreCarcassTemp[0], sharedData->mTyreCarcassTemp[1], sharedData->mTyreCarcassTemp[2], sharedData->mTyreCarcassTemp[3]);
 	ns_printf_http_chunk(nc, "\"mTyreRimTemp\":[%f,%f,%f,%f],", sharedData->mTyreRimTemp[0], sharedData->mTyreRimTemp[1], sharedData->mTyreRimTemp[2], sharedData->mTyreRimTemp[3]);
-	ns_printf_http_chunk(nc, "\"mTyreInternalAirTemp\":[%f,%f,%f,%f]", sharedData->mTyreInternalAirTemp[0], sharedData->mTyreInternalAirTemp[1], sharedData->mTyreInternalAirTemp[2], sharedData->mTyreInternalAirTemp[3]);
-	ns_printf_http_chunk(nc, "},");
+	ns_printf_http_chunk(nc, "\"mTyreInternalAirTemp\":[%f,%f,%f,%f]},", sharedData->mTyreInternalAirTemp[0], sharedData->mTyreInternalAirTemp[1], sharedData->mTyreInternalAirTemp[2], sharedData->mTyreInternalAirTemp[3]);
 }
 
 static void sendCarDamage(struct ns_connection *nc, const SharedMemory* sharedData)	{
 	ns_printf_http_chunk(nc, "\"carDamage\":{");
 	ns_printf_http_chunk(nc, "\"mCrashState\":%u,", sharedData->mCrashState);
 	ns_printf_http_chunk(nc, "\"mAeroDamage\":%f,", sharedData->mAeroDamage);
-	ns_printf_http_chunk(nc, "\"mEngineDamage\":%f", sharedData->mEngineDamage);
-	ns_printf_http_chunk(nc, "},");
+	ns_printf_http_chunk(nc, "\"mEngineDamage\":%f},", sharedData->mEngineDamage);
 }
 
 static void sendWeather(struct ns_connection *nc, const SharedMemory* sharedData)	{
@@ -223,8 +215,7 @@ static void sendWeather(struct ns_connection *nc, const SharedMemory* sharedData
 	ns_printf_http_chunk(nc, "\"mWindSpeed\":%f,", sharedData->mWindSpeed);
 	ns_printf_http_chunk(nc, "\"mWindDirectionX\":%f,", sharedData->mWindDirectionX);
 	ns_printf_http_chunk(nc, "\"mWindDirectionY\":%f,", sharedData->mWindDirectionY);
-	ns_printf_http_chunk(nc, "\"mCloudBrightness\":%f", sharedData->mCloudBrightness);
-	ns_printf_http_chunk(nc, "}");
+	ns_printf_http_chunk(nc, "\"mCloudBrightness\":%f}", sharedData->mCloudBrightness);
 }
 
 static void sendSharedMemoryJson(struct ns_connection *nc, const SharedMemory* sharedData)  {
@@ -328,10 +319,13 @@ int main()	{
 	nc = ns_bind(&mgr, s_http_port, ev_handler);
 	ns_set_protocol_http_websocket(nc);
 	s_http_server_opts.document_root = ".";
+    
     // Print some information on the console
-	printf("CREST - CARS REST API - Server started on port %s\n\n", s_http_port);
-	printf("API is available at http://localhost:%s/crest/v1/api \n\n", s_http_port);
-	printf("Press ESC to terminate\n\n");
+    printf("# CREST - CARS REST API v 0.1.1 - (c) 2015 Lars Rosenquist")
+	printf("# Server started on port %s\n\n", s_http_port);
+	printf("# API is available at http://localhost:%s/crest/v1/api \n\n", s_http_port);
+	printf("# Press ESC to terminate\n\n");
+    
 	// Keep polling until ESC is hit
 	while (true)	{
 
