@@ -321,10 +321,11 @@ int main()	{
 	s_http_server_opts.document_root = ".";
     
     // Print some information on the console
-    printf("# CREST - CARS REST API v 0.1.1 - (c) 2015 Lars Rosenquist")
-	printf("# Server started on port %s\n\n", s_http_port);
-	printf("# API is available at http://localhost:%s/crest/v1/api \n\n", s_http_port);
-	printf("# Press ESC to terminate\n\n");
+	printf("# CREST - CARS REST API v 0.1.1\n");
+	printf("# (c)2015 Lars Rosenquist\n\n");
+	printf("# Server started on port %s\n", s_http_port);
+	printf("# API is available at http://localhost:%s/crest/v1/api \n", s_http_port);
+	printf("# Press ESC to terminate\n");
     
 	// Keep polling until ESC is hit
 	while (true)	{
