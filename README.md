@@ -12,7 +12,7 @@ Any web browser or HTTP client will be able to access the data both locally and 
 
 * Version is currently BETA-0.2
 
-# Installation instructions
+# Downloading and running
 
 1. Download the source code and build/run it in Visual Studio
 
@@ -24,9 +24,9 @@ Any web browser or HTTP client will be able to access the data both locally and 
 4. If Windows complains about missing DLLs (e.g. MSVCR120.DLL or similar), please download and install the Visual C++ Redistributable Packages for Visual Studio 2013 from http://www.microsoft.com/en-us/downl....aspx?id=40784 (vcredist_x64.exe and vcredist_x86.exe), then start again.
 5. Console will show a notification about the server being up and running and display port and URL information.
 
-After the application is running:
+# Connecting to Project CARS
 
-1. Start pCARS.
+1. Start Project CARS.
 2. Enable Shared Memory in Options -> Visual -> Hardware
 3. Open up a browser and go to http://localhost:8080/crest/v1/api
 4. Profit! F5/Refresh until you drop!
