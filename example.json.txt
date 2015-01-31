@@ -1,0 +1,502 @@
+﻿{
+    "buildinfo": {
+        "mVersion": 5,
+        "mBuildVersionNumber": 917
+    },
+    "gameStates": {
+        "mGameState": 3,
+        "mSessionState": 5,
+        "mRaceState": 2
+    },
+    "participants": {
+        "mViewedParticipantIndex": 0,
+        "mNumParticipants": 18,
+        "mParticipantInfo": [
+            {
+                "mIsActive": true,
+                "mName": "Lars Rosenquist",
+                "mWorldPosition": [
+                    -18.007118,
+                    1.95001,
+                    597.896484
+                ],
+                "mCurrentLapDistance": 3189.648926,
+                "mRacePosition": 18,
+                "mLapsCompleted": 0,
+                "mCurrentLap": 1,
+                "mCurrentSector": 3
+            },
+            {
+                "mIsActive": true,
+                "mName": "Brian Laursen",
+                "mWorldPosition": [
+                    45.40659,
+                    1.9662,
+                    572.210266
+                ],
+                "mCurrentLapDistance": 3256.862549,
+                "mRacePosition": 10,
+                "mLapsCompleted": 0,
+                "mCurrentLap": 1,
+                "mCurrentSector": 3
+            },
+            {
+                "mIsActive": true,
+                "mName": "Marwin Jansen",
+                "mWorldPosition": [
+                    72.507919,
+                    1.965836,
+                    558.237122
+                ],
+                "mCurrentLapDistance": 3288.106689,
+                "mRacePosition": 6,
+                "mLapsCompleted": 0,
+                "mCurrentLap": 1,
+                "mCurrentSector": 3
+            },
+            {
+                "mIsActive": true,
+                "mName": "Zoltan Vastag",
+                "mWorldPosition": [
+                    79.276695,
+                    1.965897,
+                    549.004028
+                ],
+                "mCurrentLapDistance": 3298.195801,
+                "mRacePosition": 5,
+                "mLapsCompleted": 0,
+                "mCurrentLap": 1,
+                "mCurrentSector": 3
+            },
+            {
+                "mIsActive": true,
+                "mName": "Eike Klingspohn",
+                "mWorldPosition": [
+                    10.343096,
+                    1.957622,
+                    582.029724
+                ],
+                "mCurrentLapDistance": 3221.027588,
+                "mRacePosition": 15,
+                "mLapsCompleted": 0,
+                "mCurrentLap": 1,
+                "mCurrentSector": 3
+            },
+            {
+                "mIsActive": true,
+                "mName": "Matt Himpsl",
+                "mWorldPosition": [
+                    103.797516,
+                    1.965996,
+                    534.49585
+                ],
+                "mCurrentLapDistance": 0.781762,
+                "mRacePosition": 1,
+                "mLapsCompleted": 0,
+                "mCurrentLap": 1,
+                "mCurrentSector": 3
+            },
+            {
+                "mIsActive": true,
+                "mName": "Andrew Macpherson",
+                "mWorldPosition": [
+                    65.611435,
+                    1.966455,
+                    556.892822
+                ],
+                "mCurrentLapDistance": 3277.722412,
+                "mRacePosition": 7,
+                "mLapsCompleted": 0,
+                "mCurrentLap": 1,
+                "mCurrentSector": 3
+            },
+            {
+                "mIsActive": true,
+                "mName": "Gregory Evans",
+                "mWorldPosition": [
+                    34.004154,
+                    1.966267,
+                    577.208069
+                ],
+                "mCurrentLapDistance": 3241.455078,
+                "mRacePosition": 12,
+                "mLapsCompleted": 0,
+                "mCurrentLap": 1,
+                "mCurrentSector": 3
+            },
+            {
+                "mIsActive": true,
+                "mName": "Alex Russell-Saw",
+                "mWorldPosition": [
+                    58.409885,
+                    1.966305,
+                    565.945251
+                ],
+                "mCurrentLapDistance": 3267.300781,
+                "mRacePosition": 8,
+                "mLapsCompleted": 0,
+                "mCurrentLap": 1,
+                "mCurrentSector": 3
+            },
+            {
+                "mIsActive": true,
+                "mName": "Florian Hoech",
+                "mWorldPosition": [
+                    4.239477,
+                    1.940462,
+                    589.427368
+                ],
+                "mCurrentLapDistance": 3210.559082,
+                "mRacePosition": 16,
+                "mLapsCompleted": 0,
+                "mCurrentLap": 1,
+                "mCurrentSector": 3
+            },
+            {
+                "mIsActive": true,
+                "mName": "Karsten Lücke",
+                "mWorldPosition": [
+                    92.43885,
+                    1.966457,
+                    541.235718
+                ],
+                "mCurrentLapDistance": 3315.851563,
+                "mRacePosition": 3,
+                "mLapsCompleted": 0,
+                "mCurrentLap": 1,
+                "mCurrentSector": 3
+            },
+            {
+                "mIsActive": true,
+                "mName": "Brandt Burnette",
+                "mWorldPosition": [
+                    39.453968,
+                    1.966232,
+                    569.842834
+                ],
+                "mCurrentLapDistance": 3251.668945,
+                "mRacePosition": 11,
+                "mLapsCompleted": 0,
+                "mCurrentLap": 1,
+                "mCurrentSector": 3
+            },
+            {
+                "mIsActive": true,
+                "mName": "Joost Alferdinck",
+                "mWorldPosition": [
+                    99.567726,
+                    1.966073,
+                    542.552856
+                ],
+                "mCurrentLapDistance": 3315.851563,
+                "mRacePosition": 2,
+                "mLapsCompleted": 0,
+                "mCurrentLap": 1,
+                "mCurrentSector": 3
+            },
+            {
+                "mIsActive": true,
+                "mName": "Artem Mihailin",
+                "mWorldPosition": [
+                    18.047119,
+                    1.965564,
+                    584.049072
+                ],
+                "mCurrentLapDistance": 3226.106445,
+                "mRacePosition": 14,
+                "mLapsCompleted": 0,
+                "mCurrentLap": 1,
+                "mCurrentSector": 3
+            },
+            {
+                "mIsActive": true,
+                "mName": "Andre Ballerstein",
+                "mWorldPosition": [
+                    24.117662,
+                    1.966507,
+                    576.241333
+                ],
+                "mCurrentLapDistance": 3236.2229,
+                "mRacePosition": 13,
+                "mLapsCompleted": 0,
+                "mCurrentLap": 1,
+                "mCurrentSector": 3
+            },
+            {
+                "mIsActive": true,
+                "mName": "Julian Chisnall",
+                "mWorldPosition": [
+                    -3.001005,
+                    1.935919,
+                    587.377197
+                ],
+                "mCurrentLapDistance": 3205.303223,
+                "mRacePosition": 17,
+                "mLapsCompleted": 0,
+                "mCurrentLap": 1,
+                "mCurrentSector": 3
+            },
+            {
+                "mIsActive": true,
+                "mName": "Ray Butcher",
+                "mWorldPosition": [
+                    52.006786,
+                    1.965851,
+                    563.583374
+                ],
+                "mCurrentLapDistance": 3267.300781,
+                "mRacePosition": 9,
+                "mLapsCompleted": 0,
+                "mCurrentLap": 1,
+                "mCurrentSector": 3
+            },
+            {
+                "mIsActive": true,
+                "mName": "Weiron Tan",
+                "mWorldPosition": [
+                    86.931793,
+                    1.966205,
+                    549.890381
+                ],
+                "mCurrentLapDistance": 3303.262939,
+                "mRacePosition": 4,
+                "mLapsCompleted": 0,
+                "mCurrentLap": 1,
+                "mCurrentSector": 3
+            }
+        ]
+    },
+    "unfilteredInput": {
+        "mUnfilteredThrottle": 0,
+        "mUnfilteredBrake": 0,
+        "mUnfilteredSteering": 0,
+        "mUnfilteredClutch": 0.988889
+    },
+    "vehicleInformation": {
+        "mCarName": "Renault Megane R.S. 265",
+        "mCarClassName": "Road C2"
+    },
+    "eventInformation": {
+        "mLapsInEvent": 10,
+        "mTrackLocation": "Azure Circuit",
+        "mTrackVariation": "Grand Prix",
+        "mTrackLength": 3325.761963
+    },
+    "timings": {
+        "mLapInvalidated": true,
+        "mBestLapTime": -1,
+        "mLastLapTime": -1,
+        "mCurrentTime": 2.504997,
+        "mSplitTimeAhead": 0.452652,
+        "mSplitTimeBehind": -1,
+        "mSplitTime": 0,
+        "mEventTimeRemaining": -1,
+        "mPersonalFastestLapTime": -1,
+        "mWorldFastestLapTime": 115.046005,
+        "mCurrentSector1Time": -1,
+        "mCurrentSector2Time": -1,
+        "mCurrentSector3Time": -1,
+        "mFastestSector1Time": -1,
+        "mFastestSector2Time": -1,
+        "mFastestSector3Time": -1,
+        "mPersonalFastestSector1Time": -1,
+        "mPersonalFastestSector2Time": -1,
+        "mPersonalFastestSector3Time": -1,
+        "mWorldFastestSector1Time": 33.497002,
+        "mWorldFastestSector2Time": 40.074001,
+        "mWorldFastestSector3Time": 41.475006
+    },
+    "flags": {
+        "mHighestFlagColour": 1,
+        "mHighestFlagReason": 0
+    },
+    "pitInfo": {
+        "mPitMode": 0,
+        "mPitSchedule": 0
+    },
+    "carState": {
+        "mCarFlags": 2,
+        "mOilTempCelsius": 42.273926,
+        "mWaterTempCelsius": 41.746521,
+        "mWaterPressureKPa": 24.592064,
+        "mFuelPressureKPa": 58.5,
+        "mFuelLevel": 0.395502,
+        "mFuelCapacity": 60,
+        "mSpeed": 0,
+        "mRpm": 778.57251,
+        "mMaxRPM": 6500,
+        "mBrake": 1,
+        "mThrottle": 0,
+        "mClutch": 1,
+        "mSteering": 0,
+        "mGear": 0,
+        "mNumGears": 6,
+        "mOdometerKM": 32.299667,
+        "mAntiLockActive": false,
+        "mLastOpponentCollisionIndex": -1,
+        "mLastOpponentCollisionMagnitude": 0,
+        "mBoostActive": false,
+        "mBoostAmount": 0
+    },
+    "motionAndDeviceRelated": {
+        "mOrientation": [
+            -0.004491,
+            -1.201056,
+            -0.000547
+        ],
+        "mLocalVelocity": [
+            0,
+            0.000014,
+            0
+        ],
+        "mWorldVelocity": [
+            0,
+            0,
+            0
+        ],
+        "mAngularVelocity": [
+            -0.000002,
+            -0.000009,
+            0
+        ],
+        "mLocalAcceleration": [
+            -0.000001,
+            0,
+            0
+        ],
+        "mWorldAcceleration": [
+            -0.000001,
+            0,
+            -0.000001
+        ],
+        "mExtentsCentre": [
+            -0.000005,
+            0.790445,
+            -0.04071
+        ]
+    },
+    "wheelsAndTyres": {
+        "mTyreFlags": [
+            7,
+            7,
+            7,
+            7
+        ],
+        "mTerrain": [
+            0,
+            0,
+            0,
+            0
+        ],
+        "mTyreY": [
+            0.08793,
+            0.08644,
+            0.080496,
+            0.078542
+        ],
+        "mTyreRPS": [
+            0,
+            0,
+            0,
+            0
+        ],
+        "mTyreSlipSpeed": [
+            0.000001,
+            0.000001,
+            0.000001,
+            0.000001
+        ],
+        "mTyreTemp": [
+            66.798149,
+            66.79882,
+            66.823708,
+            66.824951
+        ],
+        "mTyreGrip": [
+            0.999999,
+            0.999999,
+            0.999999,
+            0.999999
+        ],
+        "mTyreHeightAboveGround": [
+            -0.025725,
+            -0.024339,
+            -0.014107,
+            -0.013533
+        ],
+        "mTyreLateralStiffness": [
+            250000,
+            250000,
+            250000,
+            250000
+        ],
+        "mTyreWear": [
+            0.000003,
+            0.000003,
+            0.000003,
+            0.000003
+        ],
+        "mBrakeDamage": [
+            0,
+            0,
+            0,
+            0
+        ],
+        "mSuspensionDamage": [
+            0,
+            0,
+            0,
+            0
+        ],
+        "mBrakeTempCelsius": [
+            346.739166,
+            346.739166,
+            350.848297,
+            350.847931
+        ],
+        "mTyreTreadTemp": [
+            339.960693,
+            339.961273,
+            339.98642,
+            339.98764
+        ],
+        "mTyreLayerTemp": [
+            329.752075,
+            329.762238,
+            330.109253,
+            330.124023
+        ],
+        "mTyreCarcassTemp": [
+            340.840088,
+            340.840118,
+            340.840851,
+            340.840637
+        ],
+        "mTyreRimTemp": [
+            352.94455,
+            352.944763,
+            353.024048,
+            353.017426
+        ],
+        "mTyreInternalAirTemp": [
+            344.375305,
+            344.375366,
+            344.395691,
+            344.393341
+        ]
+    },
+    "carDamage": {
+        "mCrashState": 0,
+        "mAeroDamage": 0,
+        "mEngineDamage": 0
+    },
+    "weather": {
+        "mAmbientTemperature": 24.35508,
+        "mTrackTemperature": 34.532619,
+        "mRainDensity": 0,
+        "mWindSpeed": 9.17754,
+        "mWindDirectionX": 0.707107,
+        "mWindDirectionY": -0.707107,
+        "mCloudBrightness": 2.614636
+    }
+}
