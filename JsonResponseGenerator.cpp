@@ -214,6 +214,7 @@ void sendSharedMemoryJson(struct ns_connection *nc, const SharedMemory* sharedDa
 	sendPitInfo(nc, sharedData);
 	sendCarState(nc, sharedData);
 	sendMotionDeviceRelated(nc, sharedData);
+	sendWheelsTyres(nc, sharedData);
 	sendCarDamage(nc, sharedData);
 	sendWeather(nc, sharedData);
 
