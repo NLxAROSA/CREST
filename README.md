@@ -30,3 +30,5 @@ Any web browser or HTTP client will be able to access the data both locally and 
 2. Enable Shared Memory in Options -> Visual -> Hardware
 3. Open up a browser and go to http://localhost:8080/crest/v1/api
 4. Profit! F5/Refresh until you drop!
+
+Be sure to checkout the website at http://www.cars-rest-api.com as well!
