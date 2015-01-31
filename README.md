@@ -2,13 +2,14 @@
 
 # Introducing CREST - also known as the CARS REST API #
 
-This project provides a way for developers to have access to the data provided by Project CARS Shared Memory in a more portable and accessible format than a mapped memory file. See http://www.projectcarsgame.com for more info on Project CARS.
+This project provides a way for developers to have access to the data provided by Project CARS Shared Memory in a more portable and accessible format than a mapped memory file.
 
 It's a windows native command line application (written in C++ and a fair bit of plain old C) that will act as a local web/application server and serve the data via JSON over HTTP by accessing a URL.
 
 Any web browser or HTTP client will be able to access the data both locally and inside the local network, which facilitates easy add-on development in any language (e.g. JavaScript, Java, C, C++, C#, etc. etc.) and platform (e.g. web browser, iOS, Android, Windows Phone or other) with a vast array of client REST libraries at your disposal.
 
 * Version is currently BETA-0.2
+* See http://www.projectcarsgame.com for more info on Project CARS.
 
 # Downloading and running
 
