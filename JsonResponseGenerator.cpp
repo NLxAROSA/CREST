@@ -8,12 +8,10 @@ JsonResponseGenerator::JsonResponseGenerator(){};
 
 void sendServiceUnavailable(struct ns_connection *nc)    {
 	ns_printf(nc, "%s", HTTP_RESPONSE_503);
-	ns_printf(nc, "%s", HTTP_HEADER_NO_CONTENT);
 }
 
 void sendConflict(struct ns_connection *nc)    {
 	ns_printf(nc, "%s", HTTP_RESPONSE_503);
-	ns_printf(nc, "%s", HTTP_HEADER_NO_CONTENT);
 }
 
 void sendBuildInfo(std::stringstream& ss, const SharedMemory* sharedData)	{
@@ -42,8 +40,8 @@ void sendParticipant(std::stringstream& ss, const ParticipantInfo participantInf
 
 void sendParticipants(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"participants\":{";
-	ss << "\"mViewedParticipantIndex\":%i,", sharedData->mViewedParticipantIndex;
-	ss << "\"mNumParticipants\":%i", sharedData->mNumParticipants;
+	ss << "\"mViewedParticipantIndex\":" << sharedData->mViewedParticipantIndex << ",";
+	ss << "\"mNumParticipants\":" << sharedData->mNumParticipants;
 
 	if (sharedData->mNumParticipants > -1)	{
 		ss << ",";
@@ -198,8 +196,6 @@ void sendWeather(std::stringstream& ss, const SharedMemory* sharedData)	{
 }
 
 void sendSharedMemoryJson(struct ns_connection *nc, const SharedMemory* sharedData)  {
-	/* Send HTTP OK response header */
-	ns_printf(nc, "%s", HTTP_RESPONSE_200);
 
 	std::stringstream ss;
 
@@ -221,8 +217,14 @@ void sendSharedMemoryJson(struct ns_connection *nc, const SharedMemory* sharedDa
 	sendCarDamage(ss, sharedData);
 	sendWeather(ss, sharedData);
 	ss << "}";
-	ns_printf_http_chunk(nc, ss.str().c_str());
+
+	// Send HTTP OK response with response body
+	ns_printf(nc, "HTTP/1.1 200 OK\r\n"
+		"Content-Type: text/plain\r\n"
+		"Content-Length: %d\r\n\r\n%s",
+		(int)strlen(ss.str().c_str()), ss.str().c_str());
 }
+
 void processSharedMemoryData(struct ns_connection *nc, const SharedMemory* sharedData)   {
 	// Ensure we're sync'd to the correct data version
 	if (sharedData->mVersion != SHARED_MEMORY_VERSION)	{
@@ -268,7 +270,5 @@ void JsonResponseGenerator::generateResponse(struct ns_connection *nc)	{
 		// Close the file
 		CloseHandle(fileHandle);
 	}
-	// Send empty chunk to mark the end of the response
-	ns_send_http_chunk(nc, "", 0);
 
 }

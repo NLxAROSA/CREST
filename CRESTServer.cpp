@@ -12,13 +12,13 @@
 #define CREST_API_URL "/crest/v1/api"
 
 // Constants
-#define HTTP_RESPONSE_404 "HTTP/1.1 404 Not found\r\n"
+#define HTTP_RESPONSE_404 "HTTP/1.1 404 Not found\r\nContent-Length: 0\r\n\r\n"
 
 // Server variables
 static const char *s_http_port = "8080";
 static struct ns_serve_http_opts s_http_server_opts;
 // Response generator
-static JsonResponseGenerator jsonResponseGenerator = JsonResponseGenerator();
+static JsonResponseGenerator responseGenerator = JsonResponseGenerator();
 
 // Server request handler method
 static void ev_handler(struct ns_connection *nc, int ev, void *ev_data) {
@@ -28,12 +28,10 @@ static void ev_handler(struct ns_connection *nc, int ev, void *ev_data) {
 	case NS_HTTP_REQUEST:
         // Only handle HTTP requests on the API url
 		if (ns_vcmp(&hm->uri, CREST_API_URL) == 0) {
-			jsonResponseGenerator.generateResponse(nc);
+			responseGenerator.generateResponse(nc);
 		}else{
             // Unknown URI, return a 404
 			ns_printf(nc, "%s", HTTP_RESPONSE_404);
-			ns_printf(nc, "%s", HTTP_HEADER_NO_CONTENT);
-			ns_send_http_chunk(nc, "", 0);
 		}
 		break;
 	default:
