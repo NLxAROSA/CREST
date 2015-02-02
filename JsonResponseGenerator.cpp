@@ -7,27 +7,37 @@
 JsonResponseGenerator::JsonResponseGenerator(){};
 
 void sendServiceUnavailable(struct ns_connection *nc)    {
-	ns_printf(nc, "%s", HTTP_RESPONSE_503);
+	// Send HTTP 503
+	ns_printf(nc, "HTTP/1.1 503 Service unavailable\r\n"
+		"Content-Type: application/json\r\n"
+		"Cache-Control: no-cache\r\n"
+		"Content-Length: %d\r\n\r\n%s",
+		(int)strlen(HTTP_RESPONSE_503), HTTP_RESPONSE_503);
 }
 
 void sendConflict(struct ns_connection *nc)    {
-	ns_printf(nc, "%s", HTTP_RESPONSE_503);
+	// Send HTTP 409
+	ns_printf(nc, "HTTP/1.1 409 Conflict\r\n"
+		"Content-Type: application/json\r\n"
+		"Cache-Control: no-cache\r\n"
+		"Content-Length: %d\r\n\r\n%s",
+		(int)strlen(HTTP_RESPONSE_409), HTTP_RESPONSE_409);
 }
 
-void sendBuildInfo(std::stringstream& ss, const SharedMemory* sharedData)	{
+void buildBuildInfo(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"buildinfo\":{";
 	ss << "\"mVersion\":" << sharedData->mVersion << ",";
 	ss << "\"mBuildVersionNumber\":" << sharedData->mBuildVersionNumber << "},";
 }
 
-void sendGameStates(std::stringstream& ss, const SharedMemory* sharedData)	{
+void buildGameStates(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"gameStates\":{";
 	ss << "\"mGameState\":" << sharedData->mGameState << ",";
 	ss << "\"mSessionState\":" << sharedData->mSessionState << ",";
 	ss << "\"mRaceState\":" << sharedData->mRaceState << "},";
 }
 
-void sendParticipant(std::stringstream& ss, const ParticipantInfo participantInfo)	{
+void buildParticipant(std::stringstream& ss, const ParticipantInfo participantInfo)	{
 	ss << "{\"mIsActive\":" << (participantInfo.mIsActive ? "true" : "false") << ",";
 	ss << "\"mName\":\"" << participantInfo.mName << "\",";
 	ss << "\"mWorldPosition\":[" << participantInfo.mWorldPosition[0] << "," << participantInfo.mWorldPosition[1] << "," << participantInfo.mWorldPosition[2] << "],";
@@ -38,7 +48,7 @@ void sendParticipant(std::stringstream& ss, const ParticipantInfo participantInf
 	ss << "\"mCurrentSector\":" << participantInfo.mCurrentSector << "}";
 }
 
-void sendParticipants(std::stringstream& ss, const SharedMemory* sharedData)	{
+void buildParticipants(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"participants\":{";
 	ss << "\"mViewedParticipantIndex\":" << sharedData->mViewedParticipantIndex << ",";
 	ss << "\"mNumParticipants\":" << sharedData->mNumParticipants;
@@ -48,7 +58,7 @@ void sendParticipants(std::stringstream& ss, const SharedMemory* sharedData)	{
 		ss << "\"mParticipantInfo\":[";
 
 		for (int i = 0; i < sharedData->mNumParticipants; i++)	{
-			sendParticipant(ss, sharedData->mParticipantInfo[i]);
+			buildParticipant(ss, sharedData->mParticipantInfo[i]);
 			if (i < (sharedData->mNumParticipants - 1))	{
 				ss << ",";
 			}
@@ -58,7 +68,7 @@ void sendParticipants(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "},";
 }
 
-void sendUnfilteredInput(std::stringstream& ss, const SharedMemory* sharedData)	{
+void buildUnfilteredInput(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"unfilteredInput\":{";
 	ss << "\"mUnfilteredThrottle\":" << sharedData->mUnfilteredThrottle << ",";
 	ss << "\"mUnfilteredBrake\":" << sharedData->mUnfilteredBrake << ",";
@@ -66,13 +76,13 @@ void sendUnfilteredInput(std::stringstream& ss, const SharedMemory* sharedData)	
 	ss << "\"mUnfilteredClutch\":" << sharedData->mUnfilteredClutch << "},";
 }
 
-void sendVehicleInformation(std::stringstream& ss, const SharedMemory* sharedData)	{
+void buildVehicleInformation(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"vehicleInformation\":{";
 	ss << "\"mCarName\":\"" << sharedData->mCarName << "\",";
 	ss << "\"mCarClassName\":\""<< sharedData->mCarClassName << "\"},";
 }
 
-void sendEventInformation(std::stringstream& ss, const SharedMemory* sharedData)	{
+void buildEventInformation(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"eventInformation\":{";
 	ss << "\"mLapsInEvent\":" << sharedData->mLapsInEvent << ",";
 	ss << "\"mTrackLocation\":\"" << sharedData->mTrackLocation << "\",";
@@ -80,7 +90,7 @@ void sendEventInformation(std::stringstream& ss, const SharedMemory* sharedData)
 	ss << "\"mTrackLength\":" << sharedData->mTrackLength << "},";
 }
 
-void sendTimings(std::stringstream& ss, const SharedMemory* sharedData)	{
+void buildTimings(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"timings\":{";
 	ss << "\"mLapInvalidated\":" << (sharedData->mLapInvalidated ? "true" : "false") << ",";
 	ss << "\"mBestLapTime\":" << sharedData->mBestLapTime << ",";
@@ -106,19 +116,19 @@ void sendTimings(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"mWorldFastestSector3Time\":" << sharedData->mWorldFastestSector3Time << "},";
 }
 
-void sendFlags(std::stringstream& ss, const SharedMemory* sharedData)	{
+void buildFlags(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"flags\":{";
 	ss << "\"mHighestFlagColour\":" << sharedData->mHighestFlagColour << ",";
 	ss << "\"mHighestFlagReason\":" << sharedData->mHighestFlagReason << "},";
 }
 
-void sendPitInfo(std::stringstream& ss, const SharedMemory* sharedData)	{
+void buildPitInfo(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"pitInfo\":{";
 	ss << "\"mPitMode\":" << sharedData->mPitMode << ",";
 	ss << "\"mPitSchedule\":" << sharedData->mPitSchedule << "},";
 }
 
-void sendCarState(std::stringstream& ss, const SharedMemory* sharedData)	{
+void buildCarState(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"carState\":{";
 	ss << "\"mCarFlags\":" << sharedData->mCarFlags << ",";
 	ss << "\"mOilTempCelsius\":" << sharedData->mOilTempCelsius << ",";
@@ -144,7 +154,7 @@ void sendCarState(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"mBoostAmount\":" << sharedData->mBoostAmount << "},";
 }
 
-void sendMotionDeviceRelated(std::stringstream& ss, const SharedMemory* sharedData)	{
+void buildMotionDeviceRelated(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"motionAndDeviceRelated\":{";
 	ss << "\"mOrientation\":[" << sharedData->mOrientation[0] << "," << sharedData->mOrientation[1] << "," << sharedData->mOrientation[2] << "],";
 	ss << "\"mLocalVelocity\":[" << sharedData->mLocalVelocity[0] << "," << sharedData->mLocalVelocity[1] << "," << sharedData->mLocalVelocity[2] << "],";
@@ -155,7 +165,7 @@ void sendMotionDeviceRelated(std::stringstream& ss, const SharedMemory* sharedDa
 	ss << "\"mExtentsCentre\":[" << sharedData->mExtentsCentre[0] << "," << sharedData->mExtentsCentre[1] << "," << sharedData->mExtentsCentre[2] << "]},";
 }
 
-void sendWheelsTyres(std::stringstream& ss, const SharedMemory* sharedData)	{
+void buildWheelsTyres(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"wheelsAndTyres\":{";
 	ss << "\"mTyreFlags\":[" << sharedData->mTyreFlags[0] << "," << sharedData->mTyreFlags[1] << "," << sharedData->mTyreFlags[2] << "," << sharedData->mTyreFlags[3] << "],";
 	ss << "\"mTerrain\":[" << sharedData->mTerrain[0] << "," << sharedData->mTerrain[1] << "," << sharedData->mTerrain[2] << "," << sharedData->mTerrain[3] << "],";
@@ -177,14 +187,14 @@ void sendWheelsTyres(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"mTyreInternalAirTemp\":[" << sharedData->mTyreInternalAirTemp[0] << "," << sharedData->mTyreInternalAirTemp[1] << "," << sharedData->mTyreInternalAirTemp[2] << "," << sharedData->mTyreInternalAirTemp[3] << "]},";
 }
 
-void sendCarDamage(std::stringstream& ss, const SharedMemory* sharedData)	{
+void buildCarDamage(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"carDamage\":{";
 	ss << "\"mCrashState\":" << sharedData->mCrashState << ",";
 	ss << "\"mAeroDamage\":" << sharedData->mAeroDamage << ",";
 	ss << "\"mEngineDamage\":" << sharedData->mEngineDamage << "},";
 }
 
-void sendWeather(std::stringstream& ss, const SharedMemory* sharedData)	{
+void buildWeather(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"weather\":{";
 	ss << "\"mAmbientTemperature\":" << sharedData->mAmbientTemperature << ",";
 	ss << "\"mTrackTemperature\":" << sharedData->mTrackTemperature << ",";
@@ -195,32 +205,36 @@ void sendWeather(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"mCloudBrightness\":" << sharedData->mCloudBrightness << "}";
 }
 
-void sendSharedMemoryJson(struct ns_connection *nc, const SharedMemory* sharedData)  {
-
-	std::stringstream ss;
-
-	// Start of JSON output
+void buildResponse(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "{";
 
-	sendBuildInfo(ss, sharedData);
-	sendGameStates(ss, sharedData);
-	sendParticipants(ss, sharedData);
-	sendUnfilteredInput(ss, sharedData);
-	sendVehicleInformation(ss, sharedData);
-	sendEventInformation(ss, sharedData);
-	sendTimings(ss, sharedData);
-	sendFlags(ss, sharedData);
-	sendPitInfo(ss, sharedData);
-	sendCarState(ss, sharedData);
-	sendMotionDeviceRelated(ss, sharedData);
-	sendWheelsTyres(ss, sharedData);
-	sendCarDamage(ss, sharedData);
-	sendWeather(ss, sharedData);
+	buildBuildInfo(ss, sharedData);
+	buildGameStates(ss, sharedData);
+	buildParticipants(ss, sharedData);
+	buildUnfilteredInput(ss, sharedData);
+	buildVehicleInformation(ss, sharedData);
+	buildEventInformation(ss, sharedData);
+	buildTimings(ss, sharedData);
+	buildFlags(ss, sharedData);
+	buildPitInfo(ss, sharedData);
+	buildCarState(ss, sharedData);
+	buildMotionDeviceRelated(ss, sharedData);
+	buildWheelsTyres(ss, sharedData);
+	buildCarDamage(ss, sharedData);
+	buildWeather(ss, sharedData);
 	ss << "}";
+}
 
-	// Send HTTP OK response with response body
+void buildSharedMemoryJson(struct ns_connection *nc, const SharedMemory* sharedData)  {
+
+	// Build the JSON response
+	std::stringstream ss;
+	buildResponse(ss, sharedData);
+
+	// build HTTP OK response with JSON response body
 	ns_printf(nc, "HTTP/1.1 200 OK\r\n"
-		"Content-Type: text/plain\r\n"
+		"Content-Type: application/json\r\n"
+		"Cache-Control: no-cache\r\n"
 		"Content-Length: %d\r\n\r\n%s",
 		(int)strlen(ss.str().c_str()), ss.str().c_str());
 }
@@ -228,12 +242,12 @@ void sendSharedMemoryJson(struct ns_connection *nc, const SharedMemory* sharedDa
 void processSharedMemoryData(struct ns_connection *nc, const SharedMemory* sharedData)   {
 	// Ensure we're sync'd to the correct data version
 	if (sharedData->mVersion != SHARED_MEMORY_VERSION)	{
-		// Send conflict response
+		// build conflict response
 		sendConflict(nc);
 		printf("Data version mismatch, please make sure that your pCARS version matches your CREST version\n");
 	}
 	else{
-		sendSharedMemoryJson(nc, sharedData);
+		buildSharedMemoryJson(nc, sharedData);
 	}
 
 }
@@ -255,13 +269,12 @@ void processFile(struct ns_connection *nc, HANDLE fileHandle)    {
 
 }
 
-
 void JsonResponseGenerator::generateResponse(struct ns_connection *nc)	{
 	// Open the memory mapped file
 	HANDLE fileHandle = OpenFileMappingA(PAGE_READONLY, FALSE, MAP_OBJECT_NAME);
 
 	if (fileHandle == NULL)	{
-		// File is not available, send service unavailable response
+		// File is not available, build service unavailable response
 		sendServiceUnavailable(nc);
 	}
 	else{

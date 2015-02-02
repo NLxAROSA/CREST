@@ -6,13 +6,13 @@
 #include "fossa.h"
 
 // Configuration properties
-#define CREST_VERSION "v0.4"
+#define CREST_VERSION "v0.5"
 #define POLL_TIME_IN_MILLIS 17
 #define ESC_KEY 27
 #define CREST_API_URL "/crest/v1/api"
 
 // Constants
-#define HTTP_RESPONSE_404 "HTTP/1.1 404 Not found\r\nContent-Length: 0\r\n\r\n"
+#define HTTP_RESPONSE_404 "{\"status\": \"404 Not found, please use the correct URL: " CREST_API_URL "\"}"
 
 // Server variables
 static const char *s_http_port = "8080";
@@ -31,7 +31,11 @@ static void ev_handler(struct ns_connection *nc, int ev, void *ev_data) {
 			responseGenerator.generateResponse(nc);
 		}else{
             // Unknown URI, return a 404
-			ns_printf(nc, "%s", HTTP_RESPONSE_404);
+			ns_printf(nc, "HTTP/1.1 404 Not found\r\n"
+				"Content-Type: application/json\r\n"
+				"Cache-Control: no-cache\r\n"
+				"Content-Length: %d\r\n\r\n%s",
+				(int)strlen(HTTP_RESPONSE_404), HTTP_RESPONSE_404);
 		}
 		break;
 	default:
@@ -53,7 +57,7 @@ int main()	{
 	printf("# CREST - CARS REST API %s\n", CREST_VERSION);
 	printf("# (c) 2015 Lars Rosenquist\n\n");
 	printf("# Server started on port %s\n", s_http_port);
-	printf("# API is available at http://localhost:%s/crest/v1/api \n", s_http_port);
+	printf("# API is available at http://localhost:%s%s \n", s_http_port, CREST_API_URL);
 	printf("# Press ESC to terminate\n");
     
 	// Keep polling until ESC is hit

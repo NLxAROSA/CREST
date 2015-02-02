@@ -8,7 +8,7 @@ It's a windows native command line application (written in C++ and a fair bit of
 
 Any web browser or HTTP client will be able to access the data both locally and inside the local network, which facilitates easy add-on development in any language (e.g. JavaScript, Java, C, C++, C#, etc. etc.) and platform (e.g. web browser, iOS, Android, Windows Phone or other) with a vast array of client REST libraries at your disposal.
 
-* Version is currently BETA-0.2
+* Version is currently BETA-0.5
 * See http://www.projectcarsgame.com for more info on Project CARS.
 
 # Downloading and running
@@ -17,7 +17,7 @@ Any web browser or HTTP client will be able to access the data both locally and 
 
 # OR
 
-1. Download the binary from our website (http://www.cars-rest-api.com) at http://cars-rest-api.com/CREST-BETA-0.3.exe
+1. Download the binary from our website (http://www.cars-rest-api.com) at http://cars-rest-api.com/#five
 2. Start the application by double-clicking it.
 3. Windows will complain about security (coming from an unknown/unverified source) both when downloading and starting the application. Please allow/unblock the application in order to allow it to start. Windows Firewall will also ask for permission to access the local network. Please allow it access for proper functioning.
 4. If Windows complains about missing DLLs (e.g. MSVCR120.DLL or similar), please download and install the Visual C++ Redistributable Packages for Visual Studio 2013 from http://www.microsoft.com/en-us/downl....aspx?id=40784 (vcredist_x64.exe and vcredist_x86.exe), then start again.
