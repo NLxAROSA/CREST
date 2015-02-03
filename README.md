@@ -8,7 +8,6 @@ It's a windows native command line application (written in C++ and a fair bit of
 
 Any web browser or HTTP client will be able to access the data both locally and inside the local network, which facilitates easy add-on development in any language (e.g. JavaScript, Java, C, C++, C#, etc. etc.) and platform (e.g. web browser, iOS, Android, Windows Phone or other) with a vast array of client REST libraries at your disposal.
 
-* Version is currently BETA-0.5
 * See http://www.projectcarsgame.com for more info on Project CARS.
 * Latest binary download is always available at http://cars-rest-api.com/#downloads
 
