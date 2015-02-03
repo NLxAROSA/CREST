@@ -2,7 +2,7 @@
 #include <windows.h>
 #include <stdio.h>
 #include <conio.h>
-#include "ResponseGenerator.h"
+#include "RequestHandler.h"
 #include "fossa.h"
 
 // Configuration properties
@@ -18,7 +18,7 @@
 static const char *s_http_port = "8080";
 static struct ns_serve_http_opts s_http_server_opts;
 // Response generator
-static ResponseGenerator responseGenerator = ResponseGenerator();
+static RequestHandler requestHandler = RequestHandler();
 
 // Server request handler method
 static void ev_handler(struct ns_connection *nc, int ev, void *ev_data) {
@@ -28,7 +28,7 @@ static void ev_handler(struct ns_connection *nc, int ev, void *ev_data) {
 	case NS_HTTP_REQUEST:
         // Only handle HTTP requests on the API url
 		if (ns_vcmp(&hm->uri, CREST_API_URL) == 0) {
-			responseGenerator.generateResponse(nc, hm);
+			requestHandler.handleRequest(nc, hm);
 		}else{
             // Unknown URI, return a 404
 			ns_printf(nc, "HTTP/1.1 404 Not found\r\n"

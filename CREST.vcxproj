@@ -79,10 +79,12 @@
   <ItemGroup>
     <ClCompile Include="fossa.c" />
     <ClCompile Include="CRESTServer.cpp" />
-    <ClCompile Include="JsonResponseGenerator.cpp" />
+    <ClCompile Include="JsonResponseBuilder.cpp" />
+    <ClCompile Include="RequestHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ResponseGenerator.h" />
+    <ClInclude Include="JsonResponseBuilder.h" />
+    <ClInclude Include="RequestHandler.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
