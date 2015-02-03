@@ -82,7 +82,7 @@
     <ClCompile Include="JsonResponseGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="JsonResponseGenerator.h" />
+    <ClInclude Include="ResponseGenerator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

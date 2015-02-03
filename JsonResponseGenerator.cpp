@@ -1,10 +1,16 @@
 // Dependencies
-#include "JsonResponseGenerator.h"
+#include "ResponseGenerator.h"
 #include "sharedmemory.h"
 #include "fossa.h"
 #include <sstream>
+#include <vector>
 
-JsonResponseGenerator::JsonResponseGenerator(){};
+// Constants
+#define MAP_OBJECT_NAME "$pcars$"
+#define HTTP_RESPONSE_503 "{\"status\": \"503 Service unavailable, is Project CARS running and is Shared Memory enabled?\"}"
+#define HTTP_RESPONSE_409 "{\"status\": \"409 Conflict, are CREST and Project CARS both at the latest version?\"}"
+
+ResponseGenerator::ResponseGenerator(){};
 
 void sendServiceUnavailable(struct ns_connection *nc)    {
 	// Send HTTP 503
@@ -27,14 +33,14 @@ void sendConflict(struct ns_connection *nc)    {
 void buildBuildInfo(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"buildinfo\":{";
 	ss << "\"mVersion\":" << sharedData->mVersion << ",";
-	ss << "\"mBuildVersionNumber\":" << sharedData->mBuildVersionNumber << "},";
+	ss << "\"mBuildVersionNumber\":" << sharedData->mBuildVersionNumber << "}";
 }
 
 void buildGameStates(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"gameStates\":{";
 	ss << "\"mGameState\":" << sharedData->mGameState << ",";
 	ss << "\"mSessionState\":" << sharedData->mSessionState << ",";
-	ss << "\"mRaceState\":" << sharedData->mRaceState << "},";
+	ss << "\"mRaceState\":" << sharedData->mRaceState << "}";
 }
 
 void buildParticipant(std::stringstream& ss, const ParticipantInfo participantInfo)	{
@@ -65,7 +71,7 @@ void buildParticipants(std::stringstream& ss, const SharedMemory* sharedData)	{
 		}
 		ss << "]";
 	}
-	ss << "},";
+	ss << "}";
 }
 
 void buildUnfilteredInput(std::stringstream& ss, const SharedMemory* sharedData)	{
@@ -73,13 +79,13 @@ void buildUnfilteredInput(std::stringstream& ss, const SharedMemory* sharedData)
 	ss << "\"mUnfilteredThrottle\":" << sharedData->mUnfilteredThrottle << ",";
 	ss << "\"mUnfilteredBrake\":" << sharedData->mUnfilteredBrake << ",";
 	ss << "\"mUnfilteredSteering\":" << sharedData->mUnfilteredSteering << ",";
-	ss << "\"mUnfilteredClutch\":" << sharedData->mUnfilteredClutch << "},";
+	ss << "\"mUnfilteredClutch\":" << sharedData->mUnfilteredClutch << "}";
 }
 
 void buildVehicleInformation(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"vehicleInformation\":{";
 	ss << "\"mCarName\":\"" << sharedData->mCarName << "\",";
-	ss << "\"mCarClassName\":\""<< sharedData->mCarClassName << "\"},";
+	ss << "\"mCarClassName\":\""<< sharedData->mCarClassName << "\"}";
 }
 
 void buildEventInformation(std::stringstream& ss, const SharedMemory* sharedData)	{
@@ -87,7 +93,7 @@ void buildEventInformation(std::stringstream& ss, const SharedMemory* sharedData
 	ss << "\"mLapsInEvent\":" << sharedData->mLapsInEvent << ",";
 	ss << "\"mTrackLocation\":\"" << sharedData->mTrackLocation << "\",";
 	ss << "\"mTrackVariation\":\"" << sharedData->mTrackVariation << "\",";
-	ss << "\"mTrackLength\":" << sharedData->mTrackLength << "},";
+	ss << "\"mTrackLength\":" << sharedData->mTrackLength << "}";
 }
 
 void buildTimings(std::stringstream& ss, const SharedMemory* sharedData)	{
@@ -113,19 +119,19 @@ void buildTimings(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"mPersonalFastestSector3Time\":" << sharedData->mPersonalFastestSector3Time << ",";
 	ss << "\"mWorldFastestSector1Time\":" << sharedData->mWorldFastestSector1Time << ",";
 	ss << "\"mWorldFastestSector2Time\":" << sharedData->mWorldFastestSector2Time << ",";
-	ss << "\"mWorldFastestSector3Time\":" << sharedData->mWorldFastestSector3Time << "},";
+	ss << "\"mWorldFastestSector3Time\":" << sharedData->mWorldFastestSector3Time << "}";
 }
 
 void buildFlags(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"flags\":{";
 	ss << "\"mHighestFlagColour\":" << sharedData->mHighestFlagColour << ",";
-	ss << "\"mHighestFlagReason\":" << sharedData->mHighestFlagReason << "},";
+	ss << "\"mHighestFlagReason\":" << sharedData->mHighestFlagReason << "}";
 }
 
 void buildPitInfo(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"pitInfo\":{";
 	ss << "\"mPitMode\":" << sharedData->mPitMode << ",";
-	ss << "\"mPitSchedule\":" << sharedData->mPitSchedule << "},";
+	ss << "\"mPitSchedule\":" << sharedData->mPitSchedule << "}";
 }
 
 void buildCarState(std::stringstream& ss, const SharedMemory* sharedData)	{
@@ -151,7 +157,7 @@ void buildCarState(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"mLastOpponentCollisionIndex\":" << sharedData->mLastOpponentCollisionIndex << ",";
 	ss << "\"mLastOpponentCollisionMagnitude\":" << sharedData->mLastOpponentCollisionMagnitude << ",";
 	ss << "\"mBoostActive\":" << (sharedData->mBoostActive ? "true" : "false") << ",";
-	ss << "\"mBoostAmount\":" << sharedData->mBoostAmount << "},";
+	ss << "\"mBoostAmount\":" << sharedData->mBoostAmount << "}";
 }
 
 void buildMotionDeviceRelated(std::stringstream& ss, const SharedMemory* sharedData)	{
@@ -162,7 +168,7 @@ void buildMotionDeviceRelated(std::stringstream& ss, const SharedMemory* sharedD
 	ss << "\"mAngularVelocity\":[" << sharedData->mAngularVelocity[0] << "," << sharedData->mAngularVelocity[1] << "," << sharedData->mAngularVelocity[2] << "],";
 	ss << "\"mLocalAcceleration\":[" << sharedData->mLocalAcceleration[0] << "," << sharedData->mLocalAcceleration[1] << "," << sharedData->mLocalAcceleration[2] << "],";
 	ss << "\"mWorldAcceleration\":[" << sharedData->mWorldAcceleration[0] << "," << sharedData->mWorldAcceleration[1] << "," << sharedData->mWorldAcceleration[2] << "],";
-	ss << "\"mExtentsCentre\":[" << sharedData->mExtentsCentre[0] << "," << sharedData->mExtentsCentre[1] << "," << sharedData->mExtentsCentre[2] << "]},";
+	ss << "\"mExtentsCentre\":[" << sharedData->mExtentsCentre[0] << "," << sharedData->mExtentsCentre[1] << "," << sharedData->mExtentsCentre[2] << "]}";
 }
 
 void buildWheelsTyres(std::stringstream& ss, const SharedMemory* sharedData)	{
@@ -184,14 +190,14 @@ void buildWheelsTyres(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"mTyreLayerTemp\":[" << sharedData->mTyreLayerTemp[0] << "," << sharedData->mTyreLayerTemp[1] << "," << sharedData->mTyreLayerTemp[2] << "," << sharedData->mTyreLayerTemp[3] << "],";
 	ss << "\"mTyreCarcassTemp\":[" << sharedData->mTyreCarcassTemp[0] << "," << sharedData->mTyreCarcassTemp[1] << "," << sharedData->mTyreCarcassTemp[2] << "," << sharedData->mTyreCarcassTemp[3] << "],";
 	ss << "\"mTyreRimTemp\":[" << sharedData->mTyreRimTemp[0] << "," << sharedData->mTyreRimTemp[1] << "," << sharedData->mTyreRimTemp[2] << "," << sharedData->mTyreRimTemp[3] << "],";
-	ss << "\"mTyreInternalAirTemp\":[" << sharedData->mTyreInternalAirTemp[0] << "," << sharedData->mTyreInternalAirTemp[1] << "," << sharedData->mTyreInternalAirTemp[2] << "," << sharedData->mTyreInternalAirTemp[3] << "]},";
+	ss << "\"mTyreInternalAirTemp\":[" << sharedData->mTyreInternalAirTemp[0] << "," << sharedData->mTyreInternalAirTemp[1] << "," << sharedData->mTyreInternalAirTemp[2] << "," << sharedData->mTyreInternalAirTemp[3] << "]}";
 }
 
 void buildCarDamage(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"carDamage\":{";
 	ss << "\"mCrashState\":" << sharedData->mCrashState << ",";
 	ss << "\"mAeroDamage\":" << sharedData->mAeroDamage << ",";
-	ss << "\"mEngineDamage\":" << sharedData->mEngineDamage << "},";
+	ss << "\"mEngineDamage\":" << sharedData->mEngineDamage << "}";
 }
 
 void buildWeather(std::stringstream& ss, const SharedMemory* sharedData)	{
@@ -205,31 +211,113 @@ void buildWeather(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"mCloudBrightness\":" << sharedData->mCloudBrightness << "}";
 }
 
-void buildResponse(std::stringstream& ss, const SharedMemory* sharedData)	{
-	ss << "{";
+bool contains(std::string stringToSearch, std::string stringToFind)	{
+	// Returns true if the stringToSearch contains the stringToFind
+	if (stringToSearch.compare("") > 0)	{
+		return ((int)stringToSearch.find(stringToFind) > (int)std::string::npos);
+	}
+	else{
+		// queryString is empty, return everything
+		return true;
+	}
+}
 
-	buildBuildInfo(ss, sharedData);
-	buildGameStates(ss, sharedData);
-	buildParticipants(ss, sharedData);
-	buildUnfilteredInput(ss, sharedData);
-	buildVehicleInformation(ss, sharedData);
-	buildEventInformation(ss, sharedData);
-	buildTimings(ss, sharedData);
-	buildFlags(ss, sharedData);
-	buildPitInfo(ss, sharedData);
-	buildCarState(ss, sharedData);
-	buildMotionDeviceRelated(ss, sharedData);
-	buildWheelsTyres(ss, sharedData);
-	buildCarDamage(ss, sharedData);
-	buildWeather(ss, sharedData);
+void addSeparator(std::stringstream& ss, bool skip)	{
+	// Adds a comma unless skipped
+	if (!skip)	{
+		ss << ",";
+	}
+}
+
+void buildResponse(std::stringstream& ss, const SharedMemory* sharedData, std::string queryString)	{
+	ss << "{";
+	bool skipSeparator = true;
+	if (contains(queryString, "buildInfo"))	{
+		buildBuildInfo(ss, sharedData);
+		skipSeparator = false;
+	}
+	if (contains(queryString, "gameStates"))	{
+		addSeparator(ss, skipSeparator);
+		buildGameStates(ss, sharedData);
+		skipSeparator = false;
+	}
+	if (contains(queryString, "participants"))	{
+		addSeparator(ss, skipSeparator);
+		buildParticipants(ss, sharedData);
+		skipSeparator = false;
+	}
+	if (contains(queryString, "unfilteredInputs"))	{
+		addSeparator(ss, skipSeparator);
+		buildUnfilteredInput(ss, sharedData);
+		skipSeparator = false;
+	}
+	if (contains(queryString, "vehicleInformation"))	{
+		addSeparator(ss, skipSeparator);
+		buildVehicleInformation(ss, sharedData);
+		skipSeparator = false;
+	}
+	if (contains(queryString, "eventInformation"))	{
+		addSeparator(ss, skipSeparator);
+		buildEventInformation(ss, sharedData);
+		skipSeparator = false;
+	}
+	if (contains(queryString, "timings"))	{
+		addSeparator(ss, skipSeparator);
+		buildTimings(ss, sharedData);
+		skipSeparator = false;
+	}
+	if (contains(queryString, "flags"))	{
+		addSeparator(ss, skipSeparator);
+		buildFlags(ss, sharedData);
+		skipSeparator = false;
+	}
+	if (contains(queryString, "pitInfo"))	{
+		addSeparator(ss, skipSeparator);
+		buildPitInfo(ss, sharedData);
+		skipSeparator = false;
+	}
+	if (contains(queryString, "carState"))	{
+		addSeparator(ss, skipSeparator);
+		buildCarState(ss, sharedData);
+		skipSeparator = false;
+	}
+	if (contains(queryString, "motionDeviceRelated"))	{
+		addSeparator(ss, skipSeparator);
+		buildMotionDeviceRelated(ss, sharedData);
+		skipSeparator = false;
+	}
+	if (contains(queryString, "wheelsAndTyres"))	{
+		addSeparator(ss, skipSeparator);
+		buildWheelsTyres(ss, sharedData);
+		skipSeparator = false;
+	}
+	if (contains(queryString, "carDamage"))	{
+		addSeparator(ss, skipSeparator);
+		buildCarDamage(ss, sharedData);
+		skipSeparator = false;
+	}
+	if (contains(queryString, "weather"))	{
+		addSeparator(ss, skipSeparator);
+		buildWeather(ss, sharedData);
+		skipSeparator = false;
+	}
 	ss << "}";
 }
 
-void buildSharedMemoryJson(struct ns_connection *nc, const SharedMemory* sharedData)  {
+std::string getQueryString(struct http_message *hm)	{
+	if (hm->query_string.len > 0)	{
+		std::string queryString (hm->query_string.p, hm->query_string.len);
+		return queryString;
+	}else{
+		return "";
+	}
+}
+
+void buildSharedMemoryJson(struct ns_connection *nc, const SharedMemory* sharedData, struct http_message *hm)  {
 
 	// Build the JSON response
 	std::stringstream ss;
-	buildResponse(ss, sharedData);
+	buildResponse(ss, sharedData, getQueryString(hm));
 
 	// build HTTP OK response with JSON response body
 	ns_printf(nc, "HTTP/1.1 200 OK\r\n"
@@ -239,7 +327,7 @@ void buildSharedMemoryJson(struct ns_connection *nc, const SharedMemory* sharedD
 		(int)strlen(ss.str().c_str()), ss.str().c_str());
 }
 
-void processSharedMemoryData(struct ns_connection *nc, const SharedMemory* sharedData)   {
+void processSharedMemoryData(struct ns_connection *nc, const SharedMemory* sharedData, struct http_message *hm)   {
 	// Ensure we're sync'd to the correct data version
 	if (sharedData->mVersion != SHARED_MEMORY_VERSION)	{
 		// build conflict response
@@ -247,12 +335,12 @@ void processSharedMemoryData(struct ns_connection *nc, const SharedMemory* share
 		printf("Data version mismatch, please make sure that your pCARS version matches your CREST version\n");
 	}
 	else{
-		buildSharedMemoryJson(nc, sharedData);
+		buildSharedMemoryJson(nc, sharedData, hm);
 	}
 
 }
 
-void processFile(struct ns_connection *nc, HANDLE fileHandle)    {
+void processFile(struct ns_connection *nc, HANDLE fileHandle, struct http_message *hm)    {
 
 	const SharedMemory* sharedData = (SharedMemory*)MapViewOfFile(fileHandle, PAGE_READONLY, 0, 0, sizeof(SharedMemory));
 
@@ -262,14 +350,14 @@ void processFile(struct ns_connection *nc, HANDLE fileHandle)    {
 	}
 	else{
 		// Process file
-		processSharedMemoryData(nc, sharedData);
+		processSharedMemoryData(nc, sharedData, hm);
 		// Unmap file
 		UnmapViewOfFile(sharedData);
 	}
 
 }
 
-void JsonResponseGenerator::generateResponse(struct ns_connection *nc)	{
+void ResponseGenerator::generateResponse(struct ns_connection *nc, struct http_message *hm)	{
 	// Open the memory mapped file
 	HANDLE fileHandle = OpenFileMappingA(PAGE_READONLY, FALSE, MAP_OBJECT_NAME);
 
@@ -279,7 +367,7 @@ void JsonResponseGenerator::generateResponse(struct ns_connection *nc)	{
 	}
 	else{
 		// File is available, process the file
-		processFile(nc, fileHandle);
+		processFile(nc, fileHandle, hm);
 		// Close the file
 		CloseHandle(fileHandle);
 	}
