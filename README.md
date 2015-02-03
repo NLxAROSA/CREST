@@ -32,3 +32,29 @@ Any web browser or HTTP client will be able to access the data both locally and 
 4. Profit! F5/Refresh until you drop!
 
 Be sure to checkout the website at http://www.cars-rest-api.com as well!
+
+# Advanced usage
+
+The basic URL (http://localhost:8080/crest/v1/api will expose the full set of data. If parameters are added to the request URL, the set will be limited to the parameters you specify.
+
+The following parameters are available:
+
+1. buildInfo
+2. gameStates
+3. participants
+4. unfilteredInputs
+5. vehicleInformation
+6. eventInformation
+7. timings
+8. flags
+9. pitInfo
+10. carState
+11. motionDeviceRelated
+12. wheelsAndTyres
+13. carDamage
+14. weather
+
+Example: http://localhost:8080/crest/v1/api?get=buildInfo will give you just the buildInfo.
+Example2:http://localhost:8080/crest/v1/api?get=timings,carState,weather will give you timings, carState and weather.
+
+NOTE: Sections are always in the order listed, never in the order of the request parameters.
