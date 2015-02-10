@@ -20,7 +20,7 @@ Any web browser or HTTP client will be able to access the data both locally and 
 1. Download the binary from our website (http://www.cars-rest-api.com) at http://cars-rest-api.com/#downloads
 2. Start the application by double-clicking it.
 3. Windows will complain about security (coming from an unknown/unverified source) both when downloading and starting the application. Please allow/unblock the application in order to allow it to start. Windows Firewall will also ask for permission to access the local network. Please allow it access for proper functioning.
-4. If Windows complains about missing DLLs (e.g. MSVCR120.DLL or similar), please download and install the Visual C++ Redistributable Packages for Visual Studio 2013 from http://www.microsoft.com/en-us/downl....aspx?id=40784 (vcredist_x64.exe and vcredist_x86.exe), then start again.
+4. If Windows complains about missing DLLs (e.g. MSVCR120.DLL or similar), please download and install the Visual C++ Redistributable Packages for Visual Studio 2013 from http://www.microsoft.com/en-us/download/details.aspx?id=40784 (vcredist_x64.exe and vcredist_x86.exe), then start again.
 5. Console will show a notification about the server being up and running and display port and URL information.
 
 # Connecting to Project CARS
