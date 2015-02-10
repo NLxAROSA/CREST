@@ -1,4 +1,5 @@
 #include "JsonResponseBuilder.h"
+#include "Utils.h"
 
 JsonResponseBuilder::JsonResponseBuilder(){};
 
@@ -181,17 +182,6 @@ void buildWeather(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"mWindDirectionX\":" << sharedData->mWindDirectionX << ",";
 	ss << "\"mWindDirectionY\":" << sharedData->mWindDirectionY << ",";
 	ss << "\"mCloudBrightness\":" << sharedData->mCloudBrightness << "}";
-}
-
-bool contains(std::string stringToSearch, std::string stringToFind)	{
-	// Returns true if the stringToSearch contains the stringToFind
-	if (stringToSearch.compare("") > 0)	{
-		return ((int)stringToSearch.find(stringToFind) > (int)std::string::npos);
-	}
-	else{
-		// queryString is empty, return everything
-		return true;
-	}
 }
 
 void addSeparator(std::stringstream& ss, bool skip)	{
