@@ -63,9 +63,9 @@ The following parameters are available:
 13. carDamage
 14. weather
 
-Example:  http://localhost:8080/crest/v1/api?get=buildInfo will give you just the buildInfo.
+Example:  http://localhost:8080/crest/v1/api?buildInfo=true will give you just the buildInfo.
 
-Example2: http://localhost:8080/crest/v1/api?get=timings,carState,weather will give you timings, carState and weather.
+Example2: http://localhost:8080/crest/v1/api?timings=true&carState=true&weather=true will give you timings, carState and weather.
 
 Example3: http://localhost:8080/crest/v1/api will give you the full set.
 
