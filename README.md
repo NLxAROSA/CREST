@@ -25,9 +25,9 @@ The project won't build without the proper setup of zlib. To properly enable zli
   * Install the supplied library file "zdll.lib" into a directory found in the LIB path list.
   * Add "zdll.lib" to your project.
 
-# Running the binary
+# Running CREST
 
-1. Download the binary from our website (http://www.cars-rest-api.com) at http://cars-rest-api.com/#downloads or build it yourself.
+1. Download the executable from our website (http://www.cars-rest-api.com) at http://cars-rest-api.com/#downloads or build it yourself.
 2. Start the application by double-clicking it.
 3. Windows will complain about security (coming from an unknown/unverified source) both when downloading and starting the application. Please allow/unblock the application in order to allow it to start. Windows Firewall will also ask for permission to access the local network. Please allow it access for proper functioning.
 4. If Windows complains about missing DLLs (e.g. MSVCR120.DLL or similar), please download and install the Visual C++ Redistributable Packages for Visual Studio 2013 from http://www.microsoft.com/en-us/download/details.aspx?id=40784 (vcredist_x86.exe), then start again.
