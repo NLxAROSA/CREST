@@ -85,6 +85,7 @@
     <ClCompile Include="HttpMessageHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FossaUtils.h" />
     <ClInclude Include="SharedMemoryRenderer.h" />
     <ClInclude Include="HttpMessageHandler.h" />
     <ClInclude Include="Utils.h" />

@@ -1,5 +1,6 @@
 // Dependencies
 #include "HttpMessageHandler.h"
+#include "FossaUtils.h"
 #include "SharedMemoryRenderer.h"
 #include "Utils.h"
 #include "sharedmemory.h"
@@ -10,6 +11,7 @@
 #define MAP_OBJECT_NAME "$pcars$"
 #define HTTP_RESPONSE_503 "{\"status\": \"503 Service unavailable, is Project CARS running and is Shared Memory enabled?\"}"
 #define HTTP_RESPONSE_409 "{\"status\": \"409 Conflict, are CREST and Project CARS both at the latest version?\"}"
+#define GZIP_THRESHOLD 128
 
 static SharedMemoryRenderer sharedMemoryRenderer = SharedMemoryRenderer();
 
@@ -46,14 +48,9 @@ std::string getQueryString(struct http_message *hm)	{
 
 // Returns true if the response to the given HTTP message should
 // be gzipped, based on the value of the Accept-Encoding header
-bool shouldGzipResponse(struct http_message *hm)	{
-	std::string http_message(hm->message.p, hm->message.len);
-
-	if (Utils::contains(http_message, "Accept-Encoding") && Utils::contains(http_message, "gzip"))	{
-		return true;
-	}
-
-	return false;
+// and the size of the uncompressed response
+bool shouldGzipResponse(struct http_message *hm, int responseLength)	{
+	return Utils::contains(FossaUtils::getHeaderValue("Accept-Encoding", hm), "gzip") && responseLength > GZIP_THRESHOLD;
 }
 
 // Renders the response
@@ -62,7 +59,7 @@ void renderResponse(struct ns_connection *nc, const SharedMemory* sharedData, st
 	std::string responseJson = sharedMemoryRenderer.render(sharedData, getQueryString(hm));
 	std::string response;
 
-	bool gzipResponse = shouldGzipResponse(hm);
+	bool gzipResponse = shouldGzipResponse(hm, responseJson.size());
 
 	if (gzipResponse)	{
 		response = Utils::gzipString(responseJson);

@@ -3,20 +3,20 @@
 
 SharedMemoryRenderer::SharedMemoryRenderer(){};
 
-void buildBuildInfo(std::stringstream& ss, const SharedMemory* sharedData)	{
+void renderBuildInfo(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"buildinfo\":{";
 	ss << "\"mVersion\":" << sharedData->mVersion << ",";
 	ss << "\"mBuildVersionNumber\":" << sharedData->mBuildVersionNumber << "}";
 }
 
-void buildGameStates(std::stringstream& ss, const SharedMemory* sharedData)	{
+void renderGameStates(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"gameStates\":{";
 	ss << "\"mGameState\":" << sharedData->mGameState << ",";
 	ss << "\"mSessionState\":" << sharedData->mSessionState << ",";
 	ss << "\"mRaceState\":" << sharedData->mRaceState << "}";
 }
 
-void buildParticipant(std::stringstream& ss, const ParticipantInfo participantInfo)	{
+void renderParticipant(std::stringstream& ss, const ParticipantInfo participantInfo)	{
 	ss << "{\"mIsActive\":" << (participantInfo.mIsActive ? "true" : "false") << ",";
 	ss << "\"mName\":\"" << participantInfo.mName << "\",";
 	ss << "\"mWorldPosition\":[" << participantInfo.mWorldPosition[0] << "," << participantInfo.mWorldPosition[1] << "," << participantInfo.mWorldPosition[2] << "],";
@@ -27,7 +27,7 @@ void buildParticipant(std::stringstream& ss, const ParticipantInfo participantIn
 	ss << "\"mCurrentSector\":" << participantInfo.mCurrentSector << "}";
 }
 
-void buildParticipants(std::stringstream& ss, const SharedMemory* sharedData)	{
+void renderParticipants(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"participants\":{";
 	ss << "\"mViewedParticipantIndex\":" << sharedData->mViewedParticipantIndex << ",";
 	ss << "\"mNumParticipants\":" << sharedData->mNumParticipants;
@@ -37,7 +37,7 @@ void buildParticipants(std::stringstream& ss, const SharedMemory* sharedData)	{
 		ss << "\"mParticipantInfo\":[";
 
 		for (int i = 0; i < sharedData->mNumParticipants; i++)	{
-			buildParticipant(ss, sharedData->mParticipantInfo[i]);
+			renderParticipant(ss, sharedData->mParticipantInfo[i]);
 			if (i < (sharedData->mNumParticipants - 1))	{
 				ss << ",";
 			}
@@ -47,7 +47,7 @@ void buildParticipants(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "}";
 }
 
-void buildUnfilteredInput(std::stringstream& ss, const SharedMemory* sharedData)	{
+void renderUnfilteredInput(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"unfilteredInput\":{";
 	ss << "\"mUnfilteredThrottle\":" << sharedData->mUnfilteredThrottle << ",";
 	ss << "\"mUnfilteredBrake\":" << sharedData->mUnfilteredBrake << ",";
@@ -55,13 +55,13 @@ void buildUnfilteredInput(std::stringstream& ss, const SharedMemory* sharedData)
 	ss << "\"mUnfilteredClutch\":" << sharedData->mUnfilteredClutch << "}";
 }
 
-void buildVehicleInformation(std::stringstream& ss, const SharedMemory* sharedData)	{
+void renderVehicleInformation(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"vehicleInformation\":{";
 	ss << "\"mCarName\":\"" << sharedData->mCarName << "\",";
 	ss << "\"mCarClassName\":\"" << sharedData->mCarClassName << "\"}";
 }
 
-void buildEventInformation(std::stringstream& ss, const SharedMemory* sharedData)	{
+void renderEventInformation(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"eventInformation\":{";
 	ss << "\"mLapsInEvent\":" << sharedData->mLapsInEvent << ",";
 	ss << "\"mTrackLocation\":\"" << sharedData->mTrackLocation << "\",";
@@ -69,7 +69,7 @@ void buildEventInformation(std::stringstream& ss, const SharedMemory* sharedData
 	ss << "\"mTrackLength\":" << sharedData->mTrackLength << "}";
 }
 
-void buildTimings(std::stringstream& ss, const SharedMemory* sharedData)	{
+void renderTimings(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"timings\":{";
 	ss << "\"mLapInvalidated\":" << (sharedData->mLapInvalidated ? "true" : "false") << ",";
 	ss << "\"mBestLapTime\":" << sharedData->mBestLapTime << ",";
@@ -95,19 +95,19 @@ void buildTimings(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"mWorldFastestSector3Time\":" << sharedData->mWorldFastestSector3Time << "}";
 }
 
-void buildFlags(std::stringstream& ss, const SharedMemory* sharedData)	{
+void renderFlags(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"flags\":{";
 	ss << "\"mHighestFlagColour\":" << sharedData->mHighestFlagColour << ",";
 	ss << "\"mHighestFlagReason\":" << sharedData->mHighestFlagReason << "}";
 }
 
-void buildPitInfo(std::stringstream& ss, const SharedMemory* sharedData)	{
+void renderPitInfo(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"pitInfo\":{";
 	ss << "\"mPitMode\":" << sharedData->mPitMode << ",";
 	ss << "\"mPitSchedule\":" << sharedData->mPitSchedule << "}";
 }
 
-void buildCarState(std::stringstream& ss, const SharedMemory* sharedData)	{
+void renderCarState(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"carState\":{";
 	ss << "\"mCarFlags\":" << sharedData->mCarFlags << ",";
 	ss << "\"mOilTempCelsius\":" << sharedData->mOilTempCelsius << ",";
@@ -133,7 +133,7 @@ void buildCarState(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"mBoostAmount\":" << sharedData->mBoostAmount << "}";
 }
 
-void buildMotionDeviceRelated(std::stringstream& ss, const SharedMemory* sharedData)	{
+void renderMotionDeviceRelated(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"motionAndDeviceRelated\":{";
 	ss << "\"mOrientation\":[" << sharedData->mOrientation[0] << "," << sharedData->mOrientation[1] << "," << sharedData->mOrientation[2] << "],";
 	ss << "\"mLocalVelocity\":[" << sharedData->mLocalVelocity[0] << "," << sharedData->mLocalVelocity[1] << "," << sharedData->mLocalVelocity[2] << "],";
@@ -144,7 +144,7 @@ void buildMotionDeviceRelated(std::stringstream& ss, const SharedMemory* sharedD
 	ss << "\"mExtentsCentre\":[" << sharedData->mExtentsCentre[0] << "," << sharedData->mExtentsCentre[1] << "," << sharedData->mExtentsCentre[2] << "]}";
 }
 
-void buildWheelsTyres(std::stringstream& ss, const SharedMemory* sharedData)	{
+void renderWheelsTyres(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"wheelsAndTyres\":{";
 	ss << "\"mTyreFlags\":[" << sharedData->mTyreFlags[0] << "," << sharedData->mTyreFlags[1] << "," << sharedData->mTyreFlags[2] << "," << sharedData->mTyreFlags[3] << "],";
 	ss << "\"mTerrain\":[" << sharedData->mTerrain[0] << "," << sharedData->mTerrain[1] << "," << sharedData->mTerrain[2] << "," << sharedData->mTerrain[3] << "],";
@@ -166,14 +166,14 @@ void buildWheelsTyres(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"mTyreInternalAirTemp\":[" << sharedData->mTyreInternalAirTemp[0] << "," << sharedData->mTyreInternalAirTemp[1] << "," << sharedData->mTyreInternalAirTemp[2] << "," << sharedData->mTyreInternalAirTemp[3] << "]}";
 }
 
-void buildCarDamage(std::stringstream& ss, const SharedMemory* sharedData)	{
+void renderCarDamage(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"carDamage\":{";
 	ss << "\"mCrashState\":" << sharedData->mCrashState << ",";
 	ss << "\"mAeroDamage\":" << sharedData->mAeroDamage << ",";
 	ss << "\"mEngineDamage\":" << sharedData->mEngineDamage << "}";
 }
 
-void buildWeather(std::stringstream& ss, const SharedMemory* sharedData)	{
+void renderWeather(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"weather\":{";
 	ss << "\"mAmbientTemperature\":" << sharedData->mAmbientTemperature << ",";
 	ss << "\"mTrackTemperature\":" << sharedData->mTrackTemperature << ",";
@@ -192,9 +192,11 @@ void addSeparator(std::stringstream& ss, bool skip)	{
 }
 
 // Returns true if the given section should be rendered, based on the presence
-// of the sections name in the query string
+// of the sections name parameter in the query string
 bool shouldRender(std::string queryString, std::string sectionName)	{
-	return queryString.empty() || Utils::contains(queryString, sectionName);
+	std::stringstream ss;
+	ss << sectionName << "=true";
+	return queryString.empty() || Utils::contains(queryString, ss.str());
 }
 
 std::string SharedMemoryRenderer::render(const SharedMemory* sharedData, std::string queryString)	{
@@ -204,72 +206,72 @@ std::string SharedMemoryRenderer::render(const SharedMemory* sharedData, std::st
 	ss << "{";
 	bool skipSeparator = true;
 	if (shouldRender(queryString, "buildInfo"))	{
-		buildBuildInfo(ss, sharedData);
+		renderBuildInfo(ss, sharedData);
 		skipSeparator = false;
 	}
 	if (shouldRender(queryString, "gameStates"))	{
 		addSeparator(ss, skipSeparator);
-		buildGameStates(ss, sharedData);
+		renderGameStates(ss, sharedData);
 		skipSeparator = false;
 	}
 	if (shouldRender(queryString, "participants"))	{
 		addSeparator(ss, skipSeparator);
-		buildParticipants(ss, sharedData);
+		renderParticipants(ss, sharedData);
 		skipSeparator = false;
 	}
 	if (shouldRender(queryString, "unfilteredInputs"))	{
 		addSeparator(ss, skipSeparator);
-		buildUnfilteredInput(ss, sharedData);
+		renderUnfilteredInput(ss, sharedData);
 		skipSeparator = false;
 	}
 	if (shouldRender(queryString, "vehicleInformation"))	{
 		addSeparator(ss, skipSeparator);
-		buildVehicleInformation(ss, sharedData);
+		renderVehicleInformation(ss, sharedData);
 		skipSeparator = false;
 	}
 	if (shouldRender(queryString, "eventInformation"))	{
 		addSeparator(ss, skipSeparator);
-		buildEventInformation(ss, sharedData);
+		renderEventInformation(ss, sharedData);
 		skipSeparator = false;
 	}
 	if (shouldRender(queryString, "timings"))	{
 		addSeparator(ss, skipSeparator);
-		buildTimings(ss, sharedData);
+		renderTimings(ss, sharedData);
 		skipSeparator = false;
 	}
 	if (shouldRender(queryString, "flags"))	{
 		addSeparator(ss, skipSeparator);
-		buildFlags(ss, sharedData);
+		renderFlags(ss, sharedData);
 		skipSeparator = false;
 	}
 	if (shouldRender(queryString, "pitInfo"))	{
 		addSeparator(ss, skipSeparator);
-		buildPitInfo(ss, sharedData);
+		renderPitInfo(ss, sharedData);
 		skipSeparator = false;
 	}
 	if (shouldRender(queryString, "carState"))	{
 		addSeparator(ss, skipSeparator);
-		buildCarState(ss, sharedData);
+		renderCarState(ss, sharedData);
 		skipSeparator = false;
 	}
 	if (shouldRender(queryString, "motionDeviceRelated"))	{
 		addSeparator(ss, skipSeparator);
-		buildMotionDeviceRelated(ss, sharedData);
+		renderMotionDeviceRelated(ss, sharedData);
 		skipSeparator = false;
 	}
 	if (shouldRender(queryString, "wheelsAndTyres"))	{
 		addSeparator(ss, skipSeparator);
-		buildWheelsTyres(ss, sharedData);
+		renderWheelsTyres(ss, sharedData);
 		skipSeparator = false;
 	}
 	if (shouldRender(queryString, "carDamage"))	{
 		addSeparator(ss, skipSeparator);
-		buildCarDamage(ss, sharedData);
+		renderCarDamage(ss, sharedData);
 		skipSeparator = false;
 	}
 	if (shouldRender(queryString, "weather"))	{
 		addSeparator(ss, skipSeparator);
-		buildWeather(ss, sharedData);
+		renderWeather(ss, sharedData);
 		skipSeparator = false;
 	}
 	ss << "}";
