@@ -13,9 +13,18 @@ Any web browser or HTTP client will be able to access the data both locally and 
 
 # Downloading and running
 
-1. Download the source code and build/run it in Visual Studio
+1. Download the source code
+2. Open it up in Visual Studio 2013
 
-# OR
+The project won't build without the proper setup of zlib. To properly enable zlib:
+
+1. Download and extract the compiled zlib.dll from http://www.zlib.net
+2. Follow the directions in USAGE.txt to enable it in the project. More specifically this means:
+  2a. Install the supplied header files "zlib.h" and "zconf.h" into a directory found in the INCLUDE path list.
+  2b. Install the supplied library file "zdll.lib" into a directory found in the LIB path list.
+  2c. Add "zdll.lib" to your project.
+
+# OR just get the binary:
 
 1. Download the binary from our website (http://www.cars-rest-api.com) at http://cars-rest-api.com/#downloads
 2. Start the application by double-clicking it.
