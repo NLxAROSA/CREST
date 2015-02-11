@@ -40,7 +40,7 @@ public:
 		zs.avail_in = str.size();
 
 		int ret;
-		char outbuffer[32768];
+		char* outbuffer = new char[32768];
 		std::string outstring;
 
 		do {
@@ -58,11 +58,10 @@ public:
 		deflateEnd(&zs);
 
 		if (ret != Z_STREAM_END) {
-			std::ostringstream oss;
-			oss << "Exception during zlib compression: (" << ret << ") " << zs.msg;
-			throw(std::runtime_error(oss.str()));
+			printf("Error during gzip compression: %s", zs.msg);
 		}
 
+		delete[] outbuffer;
 		return outstring;
 	}
 
