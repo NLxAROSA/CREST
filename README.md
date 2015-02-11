@@ -25,7 +25,7 @@ The project won't build without the proper setup of zlib. To properly enable zli
   * Install the supplied library file "zdll.lib" into a directory found in the LIB path list.
   * Add "zdll.lib" to your project.
 
-# Running the binary:
+# Running the binary
 
 1. Download the binary from our website (http://www.cars-rest-api.com) at http://cars-rest-api.com/#downloads or build it yourself.
 2. Start the application by double-clicking it.
