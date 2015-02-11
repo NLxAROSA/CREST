@@ -70,3 +70,7 @@ Example2: http://localhost:8080/crest/v1/api?timings=true&carState=true&weather=
 Example3: http://localhost:8080/crest/v1/api will give you the full set.
 
 NOTE: Sections are always in the order listed, never in the order of the request parameters.
+
+# Compression
+
+CREST can gzip the response body. Just add the following header to the HTTP request: "Accept-Encoding: gzip" and CREST will gzip the response and set the "Content-Encoding: gzip" HTTP response header. Regardless of the header, CREST will not compress output if the response is smaller than 128 bytes, to prevent overhead.
