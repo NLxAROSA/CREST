@@ -193,8 +193,8 @@ void addSeparator(std::stringstream& ss, bool skip)	{
 
 // Returns true if the given section should be rendered, based on the presence
 // of the sections name in the query string
-bool shouldRender(std::string sectionName, std::string queryString)	{
-	return !queryString.empty() && Utils::contains(queryString, sectionName);
+bool shouldRender(std::string queryString, std::string sectionName)	{
+	return queryString.empty() || Utils::contains(queryString, sectionName);
 }
 
 std::string SharedMemoryRenderer::render(const SharedMemory* sharedData, std::string queryString)	{
