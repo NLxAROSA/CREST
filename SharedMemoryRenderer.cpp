@@ -1,7 +1,7 @@
-#include "JsonResponseBuilder.h"
+#include "SharedMemoryRenderer.h"
 #include "Utils.h"
 
-JsonResponseBuilder::JsonResponseBuilder(){};
+SharedMemoryRenderer::SharedMemoryRenderer(){};
 
 void buildBuildInfo(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"buildinfo\":{";
@@ -184,84 +184,95 @@ void buildWeather(std::stringstream& ss, const SharedMemory* sharedData)	{
 	ss << "\"mCloudBrightness\":" << sharedData->mCloudBrightness << "}";
 }
 
+// Adds a comma, unless skipped
 void addSeparator(std::stringstream& ss, bool skip)	{
-	// Adds a comma unless skipped
 	if (!skip)	{
 		ss << ",";
 	}
 }
 
-void JsonResponseBuilder::buildResponse(std::stringstream& ss, const SharedMemory* sharedData, std::string queryString)	{
+// Returns true if the given section should be rendered, based on the presence
+// of the sections name in the query string
+bool shouldRender(std::string sectionName, std::string queryString)	{
+	return !queryString.empty() && Utils::contains(queryString, sectionName);
+}
+
+std::string SharedMemoryRenderer::render(const SharedMemory* sharedData, std::string queryString)	{
+
+	std::stringstream ss;
+
 	ss << "{";
 	bool skipSeparator = true;
-	if (contains(queryString, "buildInfo"))	{
+	if (shouldRender(queryString, "buildInfo"))	{
 		buildBuildInfo(ss, sharedData);
 		skipSeparator = false;
 	}
-	if (contains(queryString, "gameStates"))	{
+	if (shouldRender(queryString, "gameStates"))	{
 		addSeparator(ss, skipSeparator);
 		buildGameStates(ss, sharedData);
 		skipSeparator = false;
 	}
-	if (contains(queryString, "participants"))	{
+	if (shouldRender(queryString, "participants"))	{
 		addSeparator(ss, skipSeparator);
 		buildParticipants(ss, sharedData);
 		skipSeparator = false;
 	}
-	if (contains(queryString, "unfilteredInputs"))	{
+	if (shouldRender(queryString, "unfilteredInputs"))	{
 		addSeparator(ss, skipSeparator);
 		buildUnfilteredInput(ss, sharedData);
 		skipSeparator = false;
 	}
-	if (contains(queryString, "vehicleInformation"))	{
+	if (shouldRender(queryString, "vehicleInformation"))	{
 		addSeparator(ss, skipSeparator);
 		buildVehicleInformation(ss, sharedData);
 		skipSeparator = false;
 	}
-	if (contains(queryString, "eventInformation"))	{
+	if (shouldRender(queryString, "eventInformation"))	{
 		addSeparator(ss, skipSeparator);
 		buildEventInformation(ss, sharedData);
 		skipSeparator = false;
 	}
-	if (contains(queryString, "timings"))	{
+	if (shouldRender(queryString, "timings"))	{
 		addSeparator(ss, skipSeparator);
 		buildTimings(ss, sharedData);
 		skipSeparator = false;
 	}
-	if (contains(queryString, "flags"))	{
+	if (shouldRender(queryString, "flags"))	{
 		addSeparator(ss, skipSeparator);
 		buildFlags(ss, sharedData);
 		skipSeparator = false;
 	}
-	if (contains(queryString, "pitInfo"))	{
+	if (shouldRender(queryString, "pitInfo"))	{
 		addSeparator(ss, skipSeparator);
 		buildPitInfo(ss, sharedData);
 		skipSeparator = false;
 	}
-	if (contains(queryString, "carState"))	{
+	if (shouldRender(queryString, "carState"))	{
 		addSeparator(ss, skipSeparator);
 		buildCarState(ss, sharedData);
 		skipSeparator = false;
 	}
-	if (contains(queryString, "motionDeviceRelated"))	{
+	if (shouldRender(queryString, "motionDeviceRelated"))	{
 		addSeparator(ss, skipSeparator);
 		buildMotionDeviceRelated(ss, sharedData);
 		skipSeparator = false;
 	}
-	if (contains(queryString, "wheelsAndTyres"))	{
+	if (shouldRender(queryString, "wheelsAndTyres"))	{
 		addSeparator(ss, skipSeparator);
 		buildWheelsTyres(ss, sharedData);
 		skipSeparator = false;
 	}
-	if (contains(queryString, "carDamage"))	{
+	if (shouldRender(queryString, "carDamage"))	{
 		addSeparator(ss, skipSeparator);
 		buildCarDamage(ss, sharedData);
 		skipSeparator = false;
 	}
-	if (contains(queryString, "weather"))	{
+	if (shouldRender(queryString, "weather"))	{
 		addSeparator(ss, skipSeparator);
 		buildWeather(ss, sharedData);
 		skipSeparator = false;
 	}
 	ss << "}";
+
+	return ss.str();
 }

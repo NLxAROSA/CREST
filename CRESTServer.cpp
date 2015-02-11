@@ -2,11 +2,11 @@
 #include <windows.h>
 #include <stdio.h>
 #include <conio.h>
-#include "RequestHandler.h"
+#include "HttpMessageHandler.h"
 #include "fossa.h"
 
 // Configuration properties
-#define CREST_VERSION "v1.0-RC1"
+#define CREST_VERSION "v1.0-RC2"
 #define POLL_TIME_IN_MILLIS 17
 #define ESC_KEY 27
 #define CREST_API_URL "/crest/v1/api"
@@ -17,8 +17,9 @@
 // Server variables
 static const char *s_http_port = "8080";
 static struct ns_serve_http_opts s_http_server_opts;
+
 // Response generator
-static RequestHandler requestHandler = RequestHandler();
+static HttpMessageHandler httpMessageHandler = HttpMessageHandler();
 
 // Server request handler method
 static void ev_handler(struct ns_connection *nc, int ev, void *ev_data) {
@@ -28,7 +29,7 @@ static void ev_handler(struct ns_connection *nc, int ev, void *ev_data) {
 	case NS_HTTP_REQUEST:
         // Only handle HTTP requests on the API url
 		if (ns_vcmp(&hm->uri, CREST_API_URL) == 0) {
-			requestHandler.handleRequest(nc, hm);
+			httpMessageHandler.handle(nc, hm);
 		}else{
             // Unknown URI, return a 404
 			ns_printf(nc, "HTTP/1.1 404 Not found\r\n"

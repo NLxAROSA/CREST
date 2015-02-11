@@ -81,12 +81,12 @@
   <ItemGroup>
     <ClCompile Include="fossa.c" />
     <ClCompile Include="CRESTServer.cpp" />
-    <ClCompile Include="JsonResponseBuilder.cpp" />
-    <ClCompile Include="RequestHandler.cpp" />
+    <ClCompile Include="SharedMemoryRenderer.cpp" />
+    <ClCompile Include="HttpMessageHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="JsonResponseBuilder.h" />
-    <ClInclude Include="RequestHandler.h" />
+    <ClInclude Include="SharedMemoryRenderer.h" />
+    <ClInclude Include="HttpMessageHandler.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>

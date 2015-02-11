@@ -1,27 +1,22 @@
 // Dependencies
-#include "RequestHandler.h"
-#include "JsonResponseBuilder.h"
+#include "HttpMessageHandler.h"
+#include "SharedMemoryRenderer.h"
+#include "Utils.h"
 #include "sharedmemory.h"
 #include "fossa.h"
 #include <sstream>
-#include <vector>
-#include "zlib.h"
-#include "Utils.h"
+
 // Constants
 #define MAP_OBJECT_NAME "$pcars$"
 #define HTTP_RESPONSE_503 "{\"status\": \"503 Service unavailable, is Project CARS running and is Shared Memory enabled?\"}"
 #define HTTP_RESPONSE_409 "{\"status\": \"409 Conflict, are CREST and Project CARS both at the latest version?\"}"
 
-#define MOD_GZIP_ZLIB_WINDOWSIZE 15
-#define MOD_GZIP_ZLIB_CFACTOR    9
-#define MOD_GZIP_ZLIB_BSIZE      8096
+static SharedMemoryRenderer sharedMemoryRenderer = SharedMemoryRenderer();
 
-static JsonResponseBuilder jsonResponseBuilder = JsonResponseBuilder();
+HttpMessageHandler::HttpMessageHandler(){};
 
-RequestHandler::RequestHandler(){};
-
+// Outputs an HTTP 503 on the supplied connection
 void sendServiceUnavailable(struct ns_connection *nc)    {
-	// Send HTTP 503
 	ns_printf(nc, "HTTP/1.1 503 Service unavailable\r\n"
 		"Content-Type: application/json\r\n"
 		"Cache-Control: no-cache\r\n"
@@ -29,6 +24,7 @@ void sendServiceUnavailable(struct ns_connection *nc)    {
 		(int)strlen(HTTP_RESPONSE_503), HTTP_RESPONSE_503);
 }
 
+// Outputs an HTTP 409 on the supplied connection
 void sendConflict(struct ns_connection *nc)    {
 	// Send HTTP 409
 	ns_printf(nc, "HTTP/1.1 409 Conflict\r\n"
@@ -38,6 +34,7 @@ void sendConflict(struct ns_connection *nc)    {
 		(int)strlen(HTTP_RESPONSE_409), HTTP_RESPONSE_409);
 }
 
+// Extracts the query string from the given HTTP message
 std::string getQueryString(struct http_message *hm)	{
 	if (hm->query_string.len > 0)	{
 		std::string queryString (hm->query_string.p, hm->query_string.len);
@@ -47,77 +44,29 @@ std::string getQueryString(struct http_message *hm)	{
 	}
 }
 
-std::string gzipString(const std::string& str,	int compressionlevel = Z_BEST_COMPRESSION)	{
-	z_stream zs;
-	memset(&zs, 0, sizeof(zs));
-
-	if (deflateInit2(&zs,
-		compressionlevel,
-		Z_DEFLATED,
-		MOD_GZIP_ZLIB_WINDOWSIZE + 16,
-		MOD_GZIP_ZLIB_CFACTOR,
-		Z_DEFAULT_STRATEGY) != Z_OK
-		) {
-		throw(std::runtime_error("deflateInit2 failed while compressing."));
-	}
-
-	zs.next_in = (Bytef*)str.data();
-	zs.avail_in = str.size();
-
-	int ret;
-	char outbuffer[32768];
-	std::string outstring;
-
-	do {
-		zs.next_out = reinterpret_cast<Bytef*>(outbuffer);
-		zs.avail_out = sizeof(outbuffer);
-
-		ret = deflate(&zs, Z_FINISH);
-
-		if (outstring.size() < zs.total_out) {
-			outstring.append(outbuffer,
-				zs.total_out - outstring.size());
-		}
-	} while (ret == Z_OK);
-
-	deflateEnd(&zs);
-
-	if (ret != Z_STREAM_END) {
-		std::ostringstream oss;
-		oss << "Exception during zlib compression: (" << ret << ") " << zs.msg;
-		throw(std::runtime_error(oss.str()));
-	}
-
-	return outstring;
-}
-
+// Returns true if the response to the given HTTP message should
+// be gzipped, based on the value of the Accept-Encoding header
 bool shouldGzipResponse(struct http_message *hm)	{
 	std::string http_message(hm->message.p, hm->message.len);
 
-	if (contains(http_message, "Accept-Encoding") && contains(http_message, "gzip"))	{
+	if (Utils::contains(http_message, "Accept-Encoding") && Utils::contains(http_message, "gzip"))	{
 		return true;
 	}
 
 	return false;
 }
 
-void buildResponse(struct ns_connection *nc, const SharedMemory* sharedData, struct http_message *hm)  {
+// Renders the response
+void renderResponse(struct ns_connection *nc, const SharedMemory* sharedData, struct http_message *hm)  {
 
-	// Build the JSON response
-	std::stringstream ss;
-	jsonResponseBuilder.buildResponse(ss, sharedData, getQueryString(hm));
-
-	//const char* deflatedResponse = compress_string(ss.str().data());
-
-	std::string responseJson = ss.str();
+	std::string responseJson = sharedMemoryRenderer.render(sharedData, getQueryString(hm));
 	std::string response;
 
 	bool gzipResponse = shouldGzipResponse(hm);
 
 	if (gzipResponse)	{
-		response = gzipString(responseJson);
-	}
-	else{
+		response = Utils::gzipString(responseJson);
+	}else{
 		response = responseJson;
 	}
 
@@ -134,19 +83,20 @@ void buildResponse(struct ns_connection *nc, const SharedMemory* sharedData, str
 
 }
 
+// Processes the shared memory
 void processSharedMemoryData(struct ns_connection *nc, const SharedMemory* sharedData, struct http_message *hm)   {
 	// Ensure we're sync'd to the correct data version
 	if (sharedData->mVersion != SHARED_MEMORY_VERSION)	{
 		// build conflict response
 		sendConflict(nc);
 		printf("Data version mismatch, please make sure that your pCARS version matches your CREST version\n");
-	}
-	else{
-		buildResponse(nc, sharedData, hm);
+	}else{
+		renderResponse(nc, sharedData, hm);
 	}
 
 }
 
+// Processes the memory mapped file
 void processFile(struct ns_connection *nc, HANDLE fileHandle, struct http_message *hm)    {
 
 	const SharedMemory* sharedData = (SharedMemory*)MapViewOfFile(fileHandle, PAGE_READONLY, 0, 0, sizeof(SharedMemory));
@@ -164,7 +114,7 @@ void processFile(struct ns_connection *nc, HANDLE fileHandle, struct http_messag
 
 }
 
-void RequestHandler::handleRequest(struct ns_connection *nc, struct http_message *hm)	{
+void HttpMessageHandler::handle(struct ns_connection *nc, struct http_message *hm)	{
 	// Open the memory mapped file
 	HANDLE fileHandle = OpenFileMappingA(PAGE_READONLY, FALSE, MAP_OBJECT_NAME);
 
