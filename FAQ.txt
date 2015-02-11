@@ -1,0 +1,32 @@
+CREST - CARS REST API v1.0
+(C) 2015 Lars Rosenquist
+
+If you are reading this file it means you have successfully downloaded and extracted CREST! To run the application:
+
+1. Double click the CREST-1.0.exe file, or execute from the command line.
+2. Open a browser (preferrably Chrome or Firefox) or your favorite REST or HTTP client and go to http://localhost:8080/crest/v1/api.
+
+This should give a JSON response with a notification that Project CARS is not running or Shared Memory is not enabled. So:
+
+3. Start Project CARS.
+4. Go to Options -> Visuals -> Hardware and enable 'Shared Memory'.
+5. Repeat step 2.
+6. Success!
+
+FAQ
+
+Q: When trying to run CREST, Windows complains about security and it won't start.
+A: I didn't sign the binary, so Windows will not allow the binary to start by default. Please allow/unblock it to allow operation. Also, always be sure to download ONLY from http://cars-rest-api.com
+
+Q: When trying to run CREST, Windows complains about missing DDLs (e.g. MSVCR120.DLL or similar)
+A: Download and install the Visual C++ runtime from http://www.microsoft.com/en-us/download/details.aspx?id=40784 (vcredist_x86.exe) and try again.
+
+Q: When trying to run CREST, Windows Firewall asks for network access.
+A: CREST needs to access the local network, or you can't access it. Please allow access.
+
+If you have any other questions or remarks, please leave me a note at one of the following:
+
+Twitter: https://twitter.com/larsrosenquist
+GitHub: https://github.com/NLxAROSA/CREST
+Email: info@bymbl.com
+
