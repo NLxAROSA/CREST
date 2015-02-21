@@ -22,6 +22,7 @@ void sendServiceUnavailable(struct ns_connection *nc)    {
 	ns_printf(nc, "HTTP/1.1 503 Service unavailable\r\n"
 		"Content-Type: application/json\r\n"
 		"Cache-Control: no-cache\r\n"
+        "Access-Control-Allow-Origin: *"
 		"Content-Length: %d\r\n\r\n%s",
 		(int)strlen(HTTP_RESPONSE_503), HTTP_RESPONSE_503);
 }
@@ -32,6 +33,7 @@ void sendConflict(struct ns_connection *nc)    {
 	ns_printf(nc, "HTTP/1.1 409 Conflict\r\n"
 		"Content-Type: application/json\r\n"
 		"Cache-Control: no-cache\r\n"
+        "Access-Control-Allow-Origin: *"
 		"Content-Length: %d\r\n\r\n%s",
 		(int)strlen(HTTP_RESPONSE_409), HTTP_RESPONSE_409);
 }
@@ -70,7 +72,8 @@ void renderResponse(struct ns_connection *nc, const SharedMemory* sharedData, st
 	// build HTTP OK response with JSON response body
 	ns_printf(nc, "HTTP/1.1 200 OK\r\n"
 		"Content-Type: application/json\r\n"
-		"Cache-Control: no-cache\r\n");
+		"Cache-Control: no-cache\r\n"
+        "Access-Control-Allow-Origin: *");
 	if (gzipResponse)	{
 		ns_printf(nc, "Content-Encoding: gzip\r\n");
 	}
