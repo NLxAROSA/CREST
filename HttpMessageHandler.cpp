@@ -40,7 +40,7 @@ void sendConflict(struct ns_connection *nc)    {
 }
 
 // Outputs an HTTP 200 on the supplied connection for an OPTIONS request
-void sendOptions(struct ns_connection *nc, struct http_message *hm)    {
+void sendOptions(struct ns_connection *nc)    {
     // Send HTTP 200
     ns_printf(nc, "HTTP/1.1 200 Ok\r\n"
               "Access-Control-Allow-Origin: *\r\n"
