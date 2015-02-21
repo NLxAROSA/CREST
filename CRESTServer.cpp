@@ -35,7 +35,7 @@ static void ev_handler(struct ns_connection *nc, int ev, void *ev_data) {
 			ns_printf(nc, "HTTP/1.1 404 Not found\r\n"
 				"Content-Type: application/json\r\n"
 				"Cache-Control: no-cache\r\n"
-                "Access-Control-Allow-Origin: *"
+                "Access-Control-Allow-Origin: *\r\n"
 				"Content-Length: %d\r\n\r\n%s",
 				(int)strlen(HTTP_RESPONSE_404), HTTP_RESPONSE_404);
 		}
