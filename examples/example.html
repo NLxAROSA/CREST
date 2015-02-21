@@ -1,0 +1,19 @@
+<html>
+<head>
+    <script type="text/javascript">
+        function functionpCars(theUrl){
+            var request = new XMLHttpRequest();
+            request.open("GET", theUrl, false);
+            request.send(null);
+
+            var headers = request.getAllResponseHeaders().toLowerCase();
+            alert(headers);
+        }
+
+    </script>
+</head>
+<body>
+<p><a href="#" onClick="functionpCars('http://localhost:8080/crest/v1/api');">Request</a></p>
+
+</body>
+</html>
