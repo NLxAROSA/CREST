@@ -27,11 +27,11 @@ static void ev_handler(struct ns_connection *nc, int ev, void *ev_data) {
 
 	switch (ev) {
 	case NS_HTTP_REQUEST:
-        // Only handle HTTP requests on the API url
+		// Only handle HTTP requests on the API url
 		if (ns_vcmp(&hm->uri, CREST_API_URL) == 0) {
 			httpMessageHandler.handle(nc, hm);
 		}else{
-            // Unknown URI, return a 404
+			// Unknown URI, return a 404
 			ns_printf(nc, "HTTP/1.1 404 Not found\r\n"
 				"Content-Type: application/json\r\n"
 				"Cache-Control: no-cache\r\n"
@@ -54,8 +54,8 @@ int main()	{
 	nc = ns_bind(&mgr, s_http_port, ev_handler);
 	ns_set_protocol_http_websocket(nc);
 	s_http_server_opts.document_root = ".";
-    
-    // Print some information on the console
+	
+	// Print some information on the console
 	printf("# CREST - CARS REST API %s\n", CREST_VERSION);
 	printf("# (c) 2015 Lars Rosenquist\n\n");
 	printf("# Server started on port %s\n", s_http_port);
