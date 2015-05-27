@@ -6,7 +6,7 @@
 #include "fossa.h"
 
 // Configuration properties
-#define CREST_VERSION "v1.0.1"
+#define CREST_VERSION "v1.0.2"
 #define POLL_TIME_IN_MILLIS 17
 #define ESC_KEY 27
 #define CREST_API_URL "/crest/v1/api"
