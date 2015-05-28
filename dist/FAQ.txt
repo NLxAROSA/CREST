@@ -1,9 +1,9 @@
-CREST - CARS REST API v1.0
+CREST - CARS REST API v1.0.2
 (C) 2015 Lars Rosenquist
 
 If you are reading this file it means you have successfully downloaded and extracted CREST! To run the application:
 
-1. Double click the CREST-1.0.exe file, or execute from the command line.
+1. Double click the CREST executable file, or execute from the command line.
 2. Open a browser (preferrably Chrome or Firefox) or your favorite REST or HTTP client and go to http://localhost:8080/crest/v1/api.
 
 This should give a JSON response with a notification that Project CARS is not running or Shared Memory is not enabled. So:
