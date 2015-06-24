@@ -30,7 +30,7 @@
 // Header version number to test against
 enum
 {
-  SHARED_MEMORY_VERSION = 5
+  SHARED_MEMORY_VERSION = 6
 };
 
 // Maximum allowed length of string

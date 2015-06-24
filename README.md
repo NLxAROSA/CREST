@@ -1,14 +1,14 @@
 # README #
 
-# Introducing CREST - also known as the CARS REST API #
+# Introducing CREST2 - also known as the CARS2 REST API #
 
-This project provides a way for developers to have access to the data provided by Project CARS Shared Memory in a more portable and accessible format than a mapped memory file.
+This project provides a way for developers to have access to the data provided by Project CARS 2 Shared Memory in a more portable and accessible format than a mapped memory file.
 
 It's a windows native command line application (written in C++ and a fair bit of plain old C) that will act as a local web/application server and serve the data via JSON over HTTP by accessing a URL.
 
 Any web browser or HTTP client will be able to access the data both locally and inside the local network, which facilitates easy add-on development in any language (e.g. JavaScript, Java, C, C++, C#, etc. etc.) and platform (e.g. web browser, iOS, Android, Windows Phone or other) with a vast array of client REST libraries at your disposal.
 
-* See http://www.projectcarsgame.com for more info on Project CARS.
+* See http://www.wmdportal.com/projects/project-cars-2/ for more info on Project CARS.
 * Latest binary download is always available at http://cars-rest-api.com/#downloads
 
 # Building from source
@@ -37,14 +37,14 @@ The project won't build without the proper setup of zlib. To properly enable zli
 
 1. Start Project CARS.
 2. Enable Shared Memory in Options -> Visual -> Hardware
-3. Open up a browser (Chrome for best results) and go to http://localhost:8080/crest/v1/api
+3. Open up a browser (Chrome for best results) and go to http://localhost:8180/crest2/v1/api
 4. Profit! F5/Refresh until you drop!
 
 Be sure to checkout the website at http://www.cars-rest-api.com as well!
 
 # Advanced usage
 
-The basic URL (http://localhost:8080/crest/v1/api) will expose the full set of data. If parameters are added to the request URL, the set will be limited to the parameters you specify.
+The basic URL (http://localhost:8180/crest2/v1/api) will expose the full set of data. If parameters are added to the request URL, the set will be limited to the parameters you specify.
 
 The following parameters are available:
 
@@ -63,11 +63,11 @@ The following parameters are available:
 13. carDamage
 14. weather
 
-Example:  http://localhost:8080/crest/v1/api?buildInfo=true will give you just the buildInfo.
+Example:  http://localhost:8180/crest2/v1/api?buildInfo=true will give you just the buildInfo.
 
-Example2: http://localhost:8080/crest/v1/api?timings=true&carState=true&weather=true will give you timings, carState and weather.
+Example2: http://localhost:8180/crest2/v1/api?timings=true&carState=true&weather=true will give you timings, carState and weather.
 
-Example3: http://localhost:8080/crest/v1/api will give you the full set.
+Example3: http://localhost:8180/crest2/v1/api will give you the full set.
 
 NOTE: Sections are always in the order listed, never in the order of the request parameters.
 

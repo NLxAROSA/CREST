@@ -14,7 +14,7 @@
     <ProjectGuid>{0F8E15F7-8365-4955-BC62-F91558F76878}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>SMS_MapTest</RootNamespace>
-    <ProjectName>CREST</ProjectName>
+    <ProjectName>CREST2</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

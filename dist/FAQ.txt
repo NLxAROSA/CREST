@@ -1,14 +1,14 @@
-CREST - CARS REST API v1.0.2
+CREST2 - CARS2 REST API v0.0.1
 (C) 2015 Lars Rosenquist
 
-If you are reading this file it means you have successfully downloaded and extracted CREST! To run the application:
+If you are reading this file it means you have successfully downloaded and extracted CREST2! To run the application:
 
-1. Double click the CREST executable file, or execute from the command line.
-2. Open a browser (preferrably Chrome or Firefox) or your favorite REST or HTTP client and go to http://localhost:8080/crest/v1/api.
+1. Double click the CREST2 executable file, or execute from the command line.
+2. Open a browser (preferrably Chrome or Firefox) or your favorite REST or HTTP client and go to http://localhost:8180/crest2/v1/api.
 
-This should give a JSON response with a notification that Project CARS is not running or Shared Memory is not enabled. So:
+This should give a JSON response with a notification that Project CARS 2 is not running or Shared Memory is not enabled. So:
 
-3. Start Project CARS.
+3. Start Project CARS 2.
 4. Go to Options -> Visuals -> Hardware and enable 'Shared Memory'.
 5. Repeat step 2.
 6. Success!

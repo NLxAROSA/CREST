@@ -6,16 +6,16 @@
 #include "fossa.h"
 
 // Configuration properties
-#define CREST_VERSION "v1.0.2"
+#define CREST2_VERSION "v0.0.1"
 #define POLL_TIME_IN_MILLIS 17
 #define ESC_KEY 27
-#define CREST_API_URL "/crest/v1/api"
+#define CREST_API_URL "/crest2/v1/api"
 
 // Constants
 #define HTTP_RESPONSE_404 "{\"status\": \"404 Not found, please use the correct URL: " CREST_API_URL "\"}"
 
 // Server variables
-static const char *s_http_port = "8080";
+static const char *s_http_port = "8180";
 static struct ns_serve_http_opts s_http_server_opts;
 
 // Response generator
@@ -56,7 +56,7 @@ int main()	{
 	s_http_server_opts.document_root = ".";
 	
 	// Print some information on the console
-	printf("# CREST - CARS REST API %s\n", CREST_VERSION);
+	printf("# CREST2 - CARS2 REST API %s\n", CREST2_VERSION);
 	printf("# (c) 2015 Lars Rosenquist\n\n");
 	printf("# Server started on port %s\n", s_http_port);
 	printf("# API is available at http://localhost:%s%s \n", s_http_port, CREST_API_URL);
