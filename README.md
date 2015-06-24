@@ -25,7 +25,7 @@ The project won't build without the proper setup of zlib. To properly enable zli
   * Install the supplied library file "zdll.lib" into a directory found in the LIB path list.
   * Add "zdll.lib" to your project.
 
-# Running CREST
+# Running CREST2
 
 1. Download the executable from our website (http://www.cars-rest-api.com) at http://cars-rest-api.com/#downloads or build it yourself.
 2. Start the application by double-clicking it.
@@ -33,9 +33,9 @@ The project won't build without the proper setup of zlib. To properly enable zli
 4. If Windows complains about missing DLLs (e.g. MSVCR120.DLL or similar), please download and install the Visual C++ Redistributable Packages for Visual Studio 2013 from http://www.microsoft.com/en-us/download/details.aspx?id=40784 (vcredist_x86.exe), then start again.
 5. Console will show a notification about the server being up and running and display port and URL information.
 
-# Connecting to Project CARS
+# Connecting to Project CARS 2
 
-1. Start Project CARS.
+1. Start Project CARS 2.
 2. Enable Shared Memory in Options -> Visual -> Hardware
 3. Open up a browser (Chrome for best results) and go to http://localhost:8180/crest2/v1/api
 4. Profit! F5/Refresh until you drop!
