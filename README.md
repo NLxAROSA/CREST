@@ -74,3 +74,7 @@ NOTE: Sections are always in the order listed, never in the order of the request
 # Compression
 
 CREST can gzip the response body. Just add the following header to the HTTP request: "Accept-Encoding: gzip" and CREST will gzip the response and set the "Content-Encoding: gzip" HTTP response header. Regardless of the header, CREST will not compress output if the response is smaller than 128 bytes, to prevent overhead.
+
+# CREST2
+
+Check out the CREST2 branch for CREST2 (CREST for Project CARS 2)
