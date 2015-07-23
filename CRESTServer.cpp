@@ -6,7 +6,7 @@
 #include "fossa.h"
 
 // Configuration properties
-#define CREST_VERSION "v1.0.2"
+#define CREST_VERSION "v1.0.3"
 #define POLL_TIME_IN_MILLIS 17
 #define ESC_KEY 27
 #define CREST_API_URL "/crest/v1/api"
@@ -16,6 +16,7 @@
 
 // Server variables
 static const char *s_http_port = "8080";
+static const char *s_http_backup_port = "9090";
 static struct ns_serve_http_opts s_http_server_opts;
 
 // Response generator
@@ -47,19 +48,38 @@ static void ev_handler(struct ns_connection *nc, int ev, void *ev_data) {
 
 int main()	{
 
+	// Print some information on the console
+	printf("# CREST - CARS REST API %s\n", CREST_VERSION);
+	printf("# (c) 2015 Lars Rosenquist\n\n");
+	printf("# Starting server on port %s\n", s_http_port);
+
 	// Setup the server
 	struct ns_mgr mgr;
 	struct ns_connection *nc;
 	ns_mgr_init(&mgr, NULL);
+	const char *port;
+
 	nc = ns_bind(&mgr, s_http_port, ev_handler);
+	if (nc == NULL) {
+		port = s_http_backup_port;
+		printf("# Unable to acquire a connection on port 8080, using backup port 9090\n");
+		fflush(stdout);
+	}
+	else {
+		port = s_http_port;
+	}
+	nc = ns_bind(&mgr, s_http_backup_port, ev_handler);
+
+	if (nc == NULL) {
+		printf("# Unable to acquire a connection on port 9090, exiting\n");
+		fflush(stdout);
+	}
+
 	ns_set_protocol_http_websocket(nc);
 	s_http_server_opts.document_root = ".";
 	
-	// Print some information on the console
-	printf("# CREST - CARS REST API %s\n", CREST_VERSION);
-	printf("# (c) 2015 Lars Rosenquist\n\n");
-	printf("# Server started on port %s\n", s_http_port);
-	printf("# API is available at http://localhost:%s%s \n", s_http_port, CREST_API_URL);
+	printf("# Server started on port %s\n", port);
+	printf("# API is available at http://localhost:%s%s \n", port, CREST_API_URL);
 	printf("# Press ESC to terminate\n");
     
 	// Keep polling until ESC is hit
