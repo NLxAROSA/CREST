@@ -301,6 +301,9 @@ typedef struct
   char mTrackVariation[STRING_LENGTH_MAX];          // [ string ]
   float mTrackLength;                               // [ UNITS = Metres ]   [ RANGE = 0.0f->... ]    [ UNSET = 0.0f ]
 
+  // New in PCARS2
+  float unknown;
+
   // Timings
   bool mLapInvalidated;                             // [ UNITS = boolean ]   [ RANGE = false->true ]   [ UNSET = false ]
   float mBestLapTime;                               // [ UNITS = seconds ]   [ RANGE = 0.0f->... ]   [ UNSET = -1.0f ]
